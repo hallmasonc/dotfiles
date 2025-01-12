@@ -2,6 +2,7 @@
 
 # what directories should be installable by all users including the root user
 base=(
+    autorandr
     bash
 )
 
