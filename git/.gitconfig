@@ -1,0 +1,11 @@
+[user]
+	name = Mason Hall
+	email = 71787606+hallmasonc@users.noreply.github.com
+[credential "https://github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[core]
+	editor = nano
+[init]
+	defaultBranch = main
