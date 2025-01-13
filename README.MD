@@ -1,4 +1,4 @@
-# My dotfiles Setup Using GNU Stow
+# Configure ```dotfiles``` Setup Using GNU Stow
 
 ## Why?
 I landed on the option of using Stow for dotfile management because I like the files structure it uses.
