@@ -2,6 +2,7 @@
 
 # what directories should be installable by all users including the root user
 base=(
+    alacritty
     autorandr
     bash
 )
@@ -10,6 +11,8 @@ base=(
 useronly=(
     git
 )
+
+cd ".dotfiles/"
 
 # run the stow command for the passed in directory ($2) in location $1
 stowit() {
