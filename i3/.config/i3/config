@@ -1,0 +1,314 @@
+# i3 config file (v4)
+#####################################################################################################################
+#################                              Define modifier key(s)                               #################
+#####################################################################################################################
+
+# Mod1	=	Alt Key
+# Mod4	=	Super/Windows Key
+
+set $priMod	Mod4
+set $secMod	Mod1
+
+#####################################################################################################################
+#################                                Define variables                                   #################
+#####################################################################################################################
+
+# Default mode
+set $def	default
+
+# Named Workspaces
+set $ws1 	"1"
+set $ws2 	"2"
+set $ws3 	"3"
+set $ws4 	"4"
+set $ws5 	"5"
+set $ws6 	"6"
+set $ws7 	"7"
+set $ws8 	"8"
+set $ws9 	"9"
+set $ws10 	"10"
+
+# Fonts
+set $fontMono		pango:Fira Mono
+set $fontAwesome	Font Awesome v4 Compatibility
+set $fontPowerline	PowerlineSymbols
+
+#####################################################################################################################
+#################                                   Appearance                                      #################
+#####################################################################################################################
+
+# Font (default unless specified elsewhere)
+font	$fontMono	14
+
+# Gaps
+gaps	inner 3
+gaps	outer 5
+
+# Borders
+default_border				pixel 2
+default_floating_border		pixel 2
+
+# Colors
+set $bg		#282828
+set $red		#cc241d
+set $green		#98971a
+set $yellow	#d79921
+set $blue		#458588
+set $purple	#b16286
+set $aqua		#689d68
+set $gray		#a89984
+set $darkgray	#1d2021
+set $lightgray	#bdae93
+
+# class                 border		background		text		indicator		child_border
+client.focused          $lightgray	$lightgray		$bg 		$purple			$lightgray
+client.focused_inactive $darkgray	$darkgray		$lightgray	$purple			$darkgray
+client.unfocused        $darkgray	$darkgray		$lightgray	$purple			$darkgray
+client.urgent           $red		$red			$white		$red			$red
+
+#####################################################################################################################
+#################                                     Startup                                       #################
+################# All startup tasks, scripts, and sequences go here. (Session locks, standby, etc.) #################
+#####################################################################################################################
+
+# Start XDG autostart .desktop files using dex.
+exec --no-startup-id dex --autostart --environment i3
+
+# xss-lock to grab logind suspend inhibit lock and use i3lock to lock the screen before suspend.
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+# nm-applet is a desktop environment-independent system tray GUI for Network Manager.
+exec --no-startup-id nm-applet
+
+#####################################################################################################################
+#################                                     Display                                       #################
+#################      Configure your primary display in .xprofile using xrandr and autorandr.      #################
+#####################################################################################################################
+
+# Check for display changes using autorandr
+exec --no-startup-id autorandr --change
+
+# Set workspace 1 to the primary display
+workspace $ws1 output primary
+
+#####################################################################################################################
+#################                                      Keybinds                                     #################
+#################     Keybinds for applications only. Window and container binds will be later.     #################
+#####################################################################################################################
+
+# Kill focused window
+bindsym $priMod+q		kill
+
+# Start terminal
+bindsym $priMod+Return	exec alacritty
+
+# Start file explorer
+bindsym $priMod+e		exec thunar
+
+# Start launcher
+bindsym $priMod+space	exec --no-startup-id ~/.config/rofi/scripts/launcher_t1
+
+# Use brightnessctl to adjust brightness of LCD
+bindsym XF86MonBrightnessUp		exec --no-startup-id brightnessctl set +5%
+bindsym XF86MonBrightnessDown	exec --no-startup-id brightnessctl set 5%-
+
+
+###################################################### Needs Testing ################################################## 
+# Use pactl to adjust volume in PulseAudio.
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume	exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+bindsym XF86AudioLowerVolume	exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioMute			exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute		exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+#bindsym $priMod+space exec "rofi -modi drun,run -show drun -icon-theme \\"Papirus\\" -show-icons"
+
+#####################################################################################################################
+#################                                Workspace Switching                                #################
+#####################################################################################################################
+
+# Switch to workspace
+bindsym $priMod+control+1	workspace number $ws1
+bindsym $priMod+control+2	workspace number $ws2
+bindsym $priMod+control+3	workspace number $ws3
+bindsym $priMod+control+4	workspace number $ws4
+bindsym $priMod+control+5	workspace number $ws5
+bindsym $priMod+control+6	workspace number $ws6
+bindsym $priMod+control+7	workspace number $ws7
+bindsym $priMod+control+8	workspace number $ws8
+bindsym $priMod+control+9	workspace number $ws9
+bindsym $priMod+control+0	workspace number $ws10
+
+# Switch to workspaces using arrow keys; create workspace if it doesn't exist
+bindsym $priMod+control+Right	exec --no-startup-id ~/.config/i3/move_workspace.sh next
+bindsym $priMod+control+Left	exec --no-startup-id ~/.config/i3/move_workspace.sh prev
+
+#####################################################################################################################
+#################                                   Window Focus                                    #################
+#####################################################################################################################
+
+# Change focus
+bindsym $priMod+Shift+j		focus left
+bindsym $priMod+Shift+i		focus up
+bindsym $priMod+Shift+k		focus down
+bindsym $priMod+Shift+l		focus right
+
+# Change focus with cursor keys
+bindsym $priMod+Shift+Left	focus left
+bindsym $priMod+Shift+Down	focus down
+bindsym $priMod+Shift+Up	focus up
+bindsym $priMod+Shift+Right	focus right
+
+#####################################################################################################################
+#################                                  Window Layouts                                   #################
+#####################################################################################################################
+
+# place calendar at bottom right of screen
+for_window [class="(?i)gsimplecal"] floating enable, move position center
+
+# Split windows horizontally
+bindsym $priMod+h		split h
+
+# Split windows vertically
+bindsym $priMod+v		split v
+
+# Toggle fullscreen
+bindsym $priMod+f		fullscreen toggle
+
+#	Container Layout	#
+
+# Change container layout (stacked, tabbed, toggle split)
+bindsym $priMod+y layout stacking
+bindsym $priMod+t layout tabbed
+bindsym $priMod+s layout splith
+bindsym $priMod+u layout toggle 
+
+# Toggle tiling / floating
+bindsym $priMod+Shift+space floating toggle
+
+# Change focus between tiling / floating windows
+#bindsym $priMod+Space focus mode_toggle
+
+# Focus the parent container
+bindsym $priMod+a focus parent
+
+# Focus the child container
+#bindsym $priMod+d focus child
+
+bindsym $priMod+r mode "resize"
+bindsym $priMod+m mode "move"
+
+#####################################################################################################################
+#################                                       Modes                                       #################
+#####################################################################################################################
+
+# Resize Mode
+mode "resize" {
+	# Key				Operation	Property
+	#---------------------------------------------#
+	# left 	or 	j		shrink		window width
+	# right	or 	l		grow		window width
+	# up 	or 	i		shrink		window height
+	# down 	or 	k		grow		window height
+	
+	# Resize window
+	bindsym j		resize	shrink	width	10 px or 10 ppt
+	bindsym k		resize	grow	height	10 px or 10 ppt
+	bindsym i		resize	shrink	height	10 px or 10 ppt
+	bindsym l		resize	grow	width	10 px or 10 ppt
+
+	# Resize window with cursor keys
+	bindsym Left	resize	shrink	width	10 px or 10 ppt
+	bindsym Down	resize	grow	height	10 px or 10 ppt
+	bindsym Up		resize	shrink	height	10 px or 10 ppt
+	bindsym Right	resize	grow	width	10 px or 10 ppt
+
+	# Return to default
+	bindsym Escape				mode $def
+	bindsym $priMod+r			mode $def
+	bindsym $priMod+q			mode $def
+	bindsym q					mode $def
+}
+
+# Movement Mode
+mode "move" {
+	# Move focused window to workspace
+	bindsym $priMod+control+1		move window to workspace number $ws1
+	bindsym $priMod+control+2		move window to workspace number $ws2
+	bindsym $priMod+control+3		move window to workspace number $ws3
+	bindsym $priMod+control+4		move window to workspace number $ws4
+	bindsym $priMod+control+5		move window to workspace number $ws5
+	bindsym $priMod+control+6		move window to workspace number $ws6
+	bindsym $priMod+control+7		move window to workspace number $ws7
+	bindsym $priMod+control+8		move window to workspace number $ws8
+	bindsym $priMod+control+9		move window to workspace number $ws9
+	bindsym $priMod+control+0		move window to workspace number $ws10
+	
+	# Move focused window
+	bindsym $priMod+control+j		move left
+	bindsym $priMod+control+i		move up
+	bindsym $priMod+control+k		move down
+	bindsym $priMod+control+l		move right
+
+	# Move focused window with cursor keys
+	bindsym $priMod+control+Left	move left
+	bindsym $priMod+control+Up		move up
+	bindsym $priMod+control+Down	move down
+	bindsym $priMod+control+Right	move right
+
+	# Return to default
+	bindsym Escape				mode $def
+	bindsym $priMod+m			mode $def
+	bindsym $priMod+q			mode $def        
+	bindsym q					mode $def
+}
+
+#####################################################################################################################
+#################                                        Bar                                        #################
+#####################################################################################################################
+
+# Start i3bar
+bar {
+	font 		$fontMono, $fontAwesome, $fontPowerline \
+	position 	bottom
+	tray_output none
+	
+	colors {
+		# Background color
+		background $bg
+		
+		# Text color for blocks without defined color
+		statusline $lightgray
+		
+		# Workspaces 
+		# class				border		background	text
+		focused_workspace	$lightgray	$lightgray 	$bg
+		inactive_workspace	$darkgray	$darkgray 	$lightgray
+		active_workspace	$darkgray	$darkgray 	$lightgray
+		urgent_workspace	$red		$red 		$bg
+	}
+
+    status_command /usr/bin/bumblebee-status \
+	-m error nic cpu memory battery datetime \
+	-p battery.decorate="False" \
+	   datetime.format=" %A, %b %e %Y | %I:%M%p " \
+	   datetime.left-click="gsimplecal" \
+	   memory.format="{used}/{total} " \
+	   nic.exclude="lo, virbr0" \
+	   nic.status="up" \
+	   nic.format="{ssid} {state} {ip}" \
+	-t gruvbox-powerline
+}
+
+#####################################################################################################################
+#################                             Reload, Restart, and Exit                             #################
+#####################################################################################################################
+
+# reload i3 configuration
+bindsym $priMod+Shift+c reload
+
+# restart i3 inplace (preserves layout/session)
+bindsym $priMod+Shift+r restart
+
+# exit i3 (logs out of X session)
+bindsym $priMod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"

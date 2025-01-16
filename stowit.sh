@@ -4,7 +4,8 @@
 base=(
     alacritty
     autorandr
-    bash
+    #bash
+    i3
 )
 
 # folders that should, or only need to be installed for a local user
