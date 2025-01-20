@@ -1,19 +1,17 @@
 #!/usr/bin/env bash
 
-# what directories should be installable by all users including the root user
-base=(
+# folders that should, or only need to be installed for a local user
+useronly=(
     alacritty
     autorandr
     #bash
-    i3
-)
-
-# folders that should, or only need to be installed for a local user
-useronly=(
     git
+    i3
+    xorg
 )
 
-cd ".dotfiles/"
+# change directory
+cd ~/.dotfiles/
 
 # run the stow command for the passed in directory ($2) in location $1
 stowit() {
@@ -25,17 +23,12 @@ stowit() {
     stow -v -R -t ${usr} ${app}
 }
 
-echo ""
 echo "###    Stowing apps for user: $(whoami)    ###"
-
-# install apps available to local users and root
-for app in ${base[@]}; do
-    stowit "${HOME}" $app
-done
+echo ""
 
 # install only user space folders
 for app in ${useronly[@]}; do
-    if [[! "$(whoami)" = *"root"*]]; then
+    if [[ "$(whoami)" != "root" ]]; then
         stowit "${HOME}" $app
     fi
 done
