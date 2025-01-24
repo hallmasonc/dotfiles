@@ -7,6 +7,7 @@ useronly=(
     #bash
     git
     i3
+    rofi
     xorg
 )
 
