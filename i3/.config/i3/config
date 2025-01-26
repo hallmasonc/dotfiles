@@ -106,7 +106,9 @@ bindsym $priMod+Return	exec alacritty
 bindsym $priMod+e		exec thunar
 
 # Start launcher
-bindsym $priMod+space	exec --no-startup-id ~/.config/rofi/scripts/launcher_t1
+bindsym $priMod+space	exec --no-startup-id "rofi -show drun -theme ~/.config/rofi/launchers/type-1/style-15.rasi" 
+# launcher fallback
+bindsym $secMod+space 	exec --no-startup-id "rofi -modi drun,run -show drun -icon-theme \\"Papirus\\" -show-icons"
 
 # Use brightnessctl to adjust brightness of LCD
 bindsym XF86MonBrightnessUp		exec --no-startup-id brightnessctl set +5%
@@ -121,7 +123,6 @@ bindsym XF86AudioLowerVolume	exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute			exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute		exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
-#bindsym $priMod+space exec "rofi -modi drun,run -show drun -icon-theme \\"Papirus\\" -show-icons"
 
 #####################################################################################################################
 #################                                Workspace Switching                                #################
@@ -271,7 +272,7 @@ mode "move" {
 bar {
 	font 		$fontMono, $fontAwesome, $fontPowerline \
 	position 	bottom
-	tray_output none
+	tray_output	primary
 	
 	colors {
 		# Background color
