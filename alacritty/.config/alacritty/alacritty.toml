@@ -4,7 +4,7 @@ normal = { family = "Fira Mono" }
 
 [general]
 import = [
-    "themes/gruvbox_material_hard_dark.toml"
+    "themes/one_dark.toml"
 ]
 
 [cursor]
