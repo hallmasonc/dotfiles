@@ -21,7 +21,7 @@ stowit() {
     # -v verbose
     # -R recursive
     # -t target
-    stow -v -R -t ${usr} ${app}
+    stow --no-folding -v -R -t ${usr} ${app}
 }
 
 echo "###    Stowing apps for user: $(whoami)    ###"
