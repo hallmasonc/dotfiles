@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
 # Variables
-dir="${HOME}/.config/alacritty"
 theme="themes/one_dark.toml"
 script="print_colors.sh"
+
+dir="${HOME}/.config/alacritty"
 remote="https://raw.githubusercontent.com/alacritty/alacritty-theme/refs/heads/master"
+
 remoteTheme="${remote}/${theme}"
 remoteScript="${remote}/${script}"
 
