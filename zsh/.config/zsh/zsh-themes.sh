@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 # Variables
-ZSH_CUSTOM="${HOME}/.oh-my-zsh/custom"
+original="${HOME}/.zshrc.pre-oh-my-zsh"
 zshrc_file="${HOME}/.zshrc"
+ZSH_CUSTOM="${HOME}/.oh-my-zsh/custom"
 
 # Cosmetics (colors for text).
 BOLD='\e[1m'
@@ -25,6 +26,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 # clone extra plugins
 git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+git clone --depth=1 https://github.com/zsh-users/zsh-completions $ZSH_CUSTOM/plugins/zsh-completions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 
 # plugins to add to oh-my-zsh
@@ -39,3 +41,9 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM}/
 
 # set powerlevel10k theme
 sed -i.bak -e 's/^ZSH_THEME="[^"]*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' $zshrc_file
+
+# start zsh to configure powerlevel10k
+zsh
+
+# add .zshrc content to top of file
+sed -i.bak "1r ${original}" $zshrc_file
