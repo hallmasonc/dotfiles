@@ -53,5 +53,6 @@ zsh
 # add .zshrc content to top of file
 sed -i "1r ${original}" $zshrc_file
 
-# clear .bashrc
+# copy and clear .bashrc
+cp ~/.bashrc ~/.bashrc.bak
 truncate -s 0 ~/.bashrc
