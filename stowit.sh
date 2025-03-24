@@ -4,7 +4,7 @@
 useronly=(
     alacritty
     autorandr
-    bash
+    #bash
     git
     i3
     rofi

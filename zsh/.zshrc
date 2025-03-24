@@ -2,9 +2,11 @@
 fastfetch
 
 # Aliases
-alias code='codium'
 alias ll='ls --color=auto --group-directories-first -lGh'
 alias la='ls --color=auto --group-directories-first -lGha'
+alias lo='ls --color=auto --group-directories-first -oah'
+alias code='codium'
+alias cat='bat'
 alias protontricks='flatpak run com.github.Matoking.protontricks'
 alias protontricks-launch='flatpak run --command=protontricks-launch com.github.Matoking.protontricks'
 
