@@ -26,49 +26,103 @@ gc () {
 }
 
 # Check required packages
-if command -v zsh &> /dev/null && command -v git &> /dev/null && command -v fzf &> /dev/null; then
-    info_print "zsh, fzf, and git are already installed"
-else
-    if sudo pacman -S zsh fzf git; then
-        info_print "zsh, fzf, and git are now installed"
-    else
-        info_print "Please install the required packages before running this script: zsh, fzf, and git" && exit
+check_dependencies() {
+    if ! command -v zsh &> /dev/null && ! command -v fzf &> /dev/null && ! command -v git &> /dev/null; then
+        read -p "This script requires zsh, fzf, and git to be installed. Do you want to install these packages? (y/N):" user_install
+        case $user_install in
+            y|Y )
+                echo "Installing zsh, fzf, and git..."
+                if command -v apt &> /dev/null; then
+                    sudo apt install -y zsh fzf git
+                elif command -v pacman &> /dev/null; then
+                    sudo pacman -S zsh fzf git
+                elif command -v dnf &> /dev/null; then
+                    sudo dnf install -y zsh fzf git
+                elif command -v yum &> /dev/null; then
+                    sudo yum install -y zsh fzf git
+                elif command -v brew &> /dev/null; then
+                    sudo brew install zsh fzf git
+                elif command -v pkg &> /dev/null; then
+                    pkg install zsh fzf git
+                else
+                    echo "No suitable package manager found. Exiting script."
+                    exit 1
+                fi
+                ;;
+            * )
+                echo "Packages will not be installed. Exiting script."
+                exit 1
+                ;;
+        esac
     fi
-fi
+}
 
-# check required font for powerlevel10k
-if fc-list | grep -i 'meslo.*nerd' &> /dev/null; then
-    info_print "Meslo Nerd Font is installed"
-else
-    if sudo pacman -S ttf-meslo-nerd; then
-        info_print "Meslo Nerd Font is now installed"
+# check fonts
+check_fonts() {
+    if ! fc-list | grep -i 'meslo.*nerd' &> /dev/null; then
+        read -p "Powerlevel10k recommends Meslo Nerd Font to be installed. Do you want to install this package? (y/N):" user_install
+        case $user_install in
+            y|Y )
+                echo "Installing Meslo Nerd Font..."
+                if command -v apt &> /dev/null; then
+                    sudo apt install -y fonts-meslo-nerd
+                elif command -v pacman &> /dev/null; then
+                    sudo pacman -S ttf-meslo-nerd
+                elif command -v dnf &> /dev/null; then
+                    sudo dnf install -y meslo-nerd-fonts
+                elif command -v yum &> /dev/null; then
+                    sudo yum install -y meslo-nerd-fonts
+                elif command -v brew &> /dev/null; then
+                    sudo brew install meslo-nerd-font
+                elif command -v pkg &> /dev/null; then
+                    pkg install meslo-nerd-font
+                else
+                    echo "No suitable package manager found. Exiting script."
+                    exit 1
+                fi
+                ;;
+            * )
+                echo "Packages will not be installed. Exiting script."
+                exit 1
+                ;;
+        esac
     else
-        info_print "Please install the recommended font for powerlevel10k"
+        info_print "Meslo Nerd Font is installed"
     fi
-fi
+}
 
-# install oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+main () {
+    # check dependencies
+    check_dependencies
 
-# clone extra plugins
-gc https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
-gc https://github.com/zsh-users/zsh-completions $ZSH_CUSTOM/plugins/zsh-completions
-gc https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
-gc https://github.com/Aloxaf/fzf-tab $ZSH_CUSTOM/plugins/fzf-tab
-gc https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+    # check fonts
+    check_fonts
+    
+    # install oh-my-zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-# plugins to add to oh-my-zsh
-plugins_to_add=("branch" "colored-man-pages" "colorize" "command-not-found" "extract" "fzf-tab" "gh" "git" "safe-paste" "sudo" "zsh-autosuggestions" "zsh-interactive-cd" "zsh-syntax-highlighting")
+    # clone extra plugins
+    gc https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+    gc https://github.com/zsh-users/zsh-completions $ZSH_CUSTOM/plugins/zsh-completions
+    gc https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
+    gc https://github.com/Aloxaf/fzf-tab $ZSH_CUSTOM/plugins/fzf-tab
+    gc https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
 
-# add plugins
-new_plugins="plugins=(${plugins_to_add[@]})"
-sed -i "s/^plugins=.*/$new_plugins/" $zshrc_file
+    # plugins to add to oh-my-zsh
+    plugins_to_add=("branch" "colored-man-pages" "colorize" "command-not-found" "extract" "fzf-tab" "gh" "git" "safe-paste" "sudo" "zsh-autosuggestions" "zsh-interactive-cd" "zsh-syntax-highlighting")
 
-# set powerlevel10k theme
-sed -i 's/^ZSH_THEME="[^"]*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' $zshrc_file
+    # add plugins
+    new_plugins="plugins=(${plugins_to_add[@]})"
+    sed -i "s/^plugins=.*/$new_plugins/" $zshrc_file
 
-# change interactive shell to zsh
-chsh -s $(which zsh)
+    # set powerlevel10k theme
+    sed -i 's/^ZSH_THEME="[^"]*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' $zshrc_file
 
-# add .zshrc content to top of file
-sed -i "0r ${original}" $zshrc_file
+    # change interactive shell to zsh
+    chsh -s $(which zsh)
+
+    # add .zshrc content to top of file
+    sed -i "0r ${original}" $zshrc_file
+}
+
+main

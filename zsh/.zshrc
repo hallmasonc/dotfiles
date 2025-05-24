@@ -2,8 +2,7 @@
 fastfetch
 
 # Aliases
-alias ll='ls --color=auto --group-directories-first -lGh'
-alias la='ls --color=auto --group-directories-first -lGha'
+alias ll='ls --color=auto --group-directories-first -lGha'
 alias lo='ls --color=auto --group-directories-first -oah'
 alias code='codium'
 alias cat='bat'
