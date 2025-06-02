@@ -22,7 +22,7 @@ info_print () {
 # git clone
 gc () {
     git clone --depth=1 $1 $2
-    info_print "Cloning into ${$2}"
+    info_print "Cloning into $2"
 }
 
 # Check required packages
