@@ -41,12 +41,18 @@ set $fontPowerline	PowerlineSymbols
 font	$fontMono	14
 
 # Gaps
-gaps	inner 3
-gaps	outer 5
+gaps	inner 5
+gaps	outer 3
+gaps	top 3
+gaps	bottom 3
+
+smart_gaps on # Remove gaps when only one window on screen
 
 # Borders
-default_border				pixel 2
-default_floating_border		pixel 2
+default_border				pixel 3
+default_floating_border		pixel 3
+
+hide_edge_borders smart
 
 # Colors
 set $bg		#282828
@@ -106,9 +112,12 @@ bindsym $priMod+Return	exec alacritty
 bindsym $priMod+e		exec thunar
 
 # Start launcher
-bindsym $priMod+space	exec --no-startup-id "rofi -show drun -theme ~/.config/rofi/launchers/type-1/style-15.rasi" 
+bindsym $priMod+space	exec --no-startup-id ".config/rofi/scripts/launcher_t3"
 # launcher fallback
 bindsym $secMod+space 	exec --no-startup-id "rofi -modi drun,run -show drun -icon-theme \\"Papirus\\" -show-icons"
+
+# Start powermenu
+bindsym $priMod+BackSpace exec --no-startup-id ".config/rofi/scripts/powermenu_t1"
 
 # Use brightnessctl to adjust brightness of LCD
 bindsym XF86MonBrightnessUp		exec --no-startup-id brightnessctl set +5%

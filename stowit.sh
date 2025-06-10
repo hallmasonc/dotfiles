@@ -9,6 +9,7 @@ useronly=(
     i3
     rofi
     xorg
+    zsh
 )
 
 # change directory
