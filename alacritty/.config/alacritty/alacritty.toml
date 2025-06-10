@@ -1,11 +1,12 @@
 [font]
-size = 8.0
+size = 10.0
 normal = { family = "Fira Mono" } 
 
 [general]
 import = [
     "themes/one_dark.toml"
 ]
+
 [cursor]
 style = { shape = "Beam", blinking = "Always" }
 blink_interval = 500

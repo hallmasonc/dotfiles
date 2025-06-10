@@ -1,4 +1,4 @@
-# i3 config file (v4)
+# sway config file
 #####################################################################################################################
 #################                              Define modifier key(s)                               #################
 #####################################################################################################################
@@ -33,9 +33,15 @@ set $fontMono		pango:Fira Mono
 set $fontAwesome	Font Awesome v4 Compatibility
 set $fontPowerline	PowerlineSymbols
 
+# Named Displays
+set $priDisp "eDP-1"
+
 #####################################################################################################################
 #################                                   Appearance                                      #################
 #####################################################################################################################
+
+# Wallpaper
+#output * bg ~/path/to/wallpaper fit
 
 # Font (default unless specified elsewhere)
 font	$fontMono	14
@@ -55,27 +61,28 @@ default_floating_border		pixel 3
 hide_edge_borders smart
 
 # Colors
-set $bg		#282828
-set $red		#cc241d
-set $green		#98971a
-set $yellow	#d79921
-set $blue		#458588
-set $purple	#b16286
-set $aqua		#689d68
-set $gray		#a89984
-set $darkgray	#1d2021
-set $lightgray	#bdae93
+set $bg		#282c34
+set $fg		#abb2bf
+set $red		#eb6e67
+set $green		#95ee8f
+set $yellow	#f8c456
+set $blue		#6eaafb
+set $purple	#c678dd
+set $cyan		#6cdcf7
+set $text		#dfdfdf
 
 # class                 border		background		text		indicator		child_border
-client.focused          $lightgray	$lightgray		$bg 		$purple			$lightgray
-client.focused_inactive $darkgray	$darkgray		$lightgray	$purple			$darkgray
-client.unfocused        $darkgray	$darkgray		$lightgray	$purple			$darkgray
-client.urgent           $red		$red			$white		$red			$red
+client.focused          $cyan		$bg				$text 		$cyan			$cyan
+client.focused_inactive $blue		$bg				$fg			$blue			$blue
+client.unfocused        $bg			$bg				$fg			$bg				$bg
+client.urgent           $red		$red			$bg			$red			$red
 
 #####################################################################################################################
 #################                                     Startup                                       #################
 ################# All startup tasks, scripts, and sequences go here. (Session locks, standby, etc.) #################
 #####################################################################################################################
+
+###################################################### Needs Testing ################################################ 
 
 # Start XDG autostart .desktop files using dex.
 exec --no-startup-id dex --autostart --environment i3
@@ -91,11 +98,8 @@ exec --no-startup-id nm-applet
 #################      Configure your primary display in .xprofile using xrandr and autorandr.      #################
 #####################################################################################################################
 
-# Check for display changes using autorandr
-exec --no-startup-id autorandr --change
-
 # Set workspace 1 to the primary display
-workspace $ws1 output primary
+workspace $ws1 output $priDisp
 
 #####################################################################################################################
 #################                                      Keybinds                                     #################
@@ -114,7 +118,7 @@ bindsym $priMod+e		exec thunar
 # Start launcher
 bindsym $priMod+space	exec --no-startup-id ".config/rofi/scripts/launcher_t3"
 # launcher fallback
-bindsym $secMod+space 	exec --no-startup-id "rofi -modi drun,run -show drun -icon-theme \\"Papirus\\" -show-icons"
+#bindsym $secMod+space 	exec --no-startup-id "rofi -modi drun,run -show drun -icon-theme \\"Papirus\\" -show-icons"
 
 # Start powermenu
 bindsym $priMod+BackSpace exec --no-startup-id ".config/rofi/scripts/powermenu_t1"
@@ -124,7 +128,7 @@ bindsym XF86MonBrightnessUp		exec --no-startup-id brightnessctl set +5%
 bindsym XF86MonBrightnessDown	exec --no-startup-id brightnessctl set 5%-
 
 
-###################################################### Needs Testing ################################################## 
+###################################################### Needs Testing ################################################ 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
 bindsym XF86AudioRaiseVolume	exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
@@ -150,8 +154,8 @@ bindsym $priMod+control+9	workspace number $ws9
 bindsym $priMod+control+0	workspace number $ws10
 
 # Switch to workspaces using arrow keys; create workspace if it doesn't exist
-bindsym $priMod+control+Right	exec --no-startup-id ~/.config/i3/move_workspace.sh next
-bindsym $priMod+control+Left	exec --no-startup-id ~/.config/i3/move_workspace.sh prev
+bindsym $priMod+control+Right	exec --no-startup-id ~/.config/sway/move_workspace.sh next
+bindsym $priMod+control+Left	exec --no-startup-id ~/.config/sway/move_workspace.sh prev
 
 #####################################################################################################################
 #################                                   Window Focus                                    #################
@@ -277,7 +281,7 @@ mode "move" {
 #################                                        Bar                                        #################
 #####################################################################################################################
 
-# Start i3bar
+# Start swaybar
 bar {
 	font 		$fontMono, $fontAwesome, $fontPowerline \
 	position 	bottom
@@ -288,13 +292,13 @@ bar {
 		background $bg
 		
 		# Text color for blocks without defined color
-		statusline $lightgray
+		statusline $fg
 		
 		# Workspaces 
 		# class				border		background	text
-		focused_workspace	$lightgray	$lightgray 	$bg
-		inactive_workspace	$darkgray	$darkgray 	$lightgray
-		active_workspace	$darkgray	$darkgray 	$lightgray
+		focused_workspace	$bg			$purple 	$text
+		inactive_workspace	$bg			$bg		 	$fg
+		active_workspace	$cyan		$bg		 	$fg
 		urgent_workspace	$red		$red 		$bg
 	}
 
@@ -307,18 +311,15 @@ bar {
 	   nic.exclude="lo, virbr0" \
 	   nic.status="up" \
 	   nic.format="{ssid} {state} {ip}" \
-	-t gruvbox-powerline
+	-t onedark-powerline
 }
 
 #####################################################################################################################
 #################                             Reload, Restart, and Exit                             #################
 #####################################################################################################################
 
-# reload i3 configuration
+# reload sway configuration
 bindsym $priMod+Shift+c reload
 
-# restart i3 inplace (preserves layout/session)
-bindsym $priMod+Shift+r restart
-
-# exit i3 (logs out of X session)
-bindsym $priMod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+# exit sway (logs out of X session)
+bindsym $priMod+Shift+e exec "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your X session.' -B 'Yes, exit sway' 'swaymsg exit'"

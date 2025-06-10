@@ -1,5 +1,0 @@
-# Autodetect display configuration
-autorandr --change
-
-# Set previously used wallpaper
-~/.fehbg &
