@@ -1,4 +1,4 @@
-output "Samsung Electric Company LF24T650F HCJR00722" {
+output "Samsung Electric Company LF24T650F HCJRC00722" {
     alias $samsung
 }
 
