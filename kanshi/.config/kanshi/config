@@ -16,8 +16,8 @@ profile docked_samsung {
 }
 
 profile docked_asus {
-    output eDP-1 enable 1920,0
-    output $asus enable posision
+    output eDP-1 enable position 1920,0
+    output $asus enable
 }
 
 profile clamshell_samsung {
@@ -31,7 +31,7 @@ profile clamshell_asus {
 }
 
 profile desktop {
-    output $samsung enable -1920,0
+    output $samsung enable position-1920,0
     output $asus enable
 }
 
