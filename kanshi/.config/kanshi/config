@@ -2,6 +2,10 @@ output "Samsung Electric Company LF24T650F HCJR00722" {
     alias $samsung
 }
 
+output "ASUSTek COMPUTER INC VG259QM M4LMQS208461" {
+    alias $asus
+}
+
 profile mobile {
     output eDP-1 enable
 }
@@ -11,9 +15,24 @@ profile docked_samsung {
     output $samsung enable position -1920,0
 }
 
+profile docked_asus {
+    output eDP-1 enable 1920,0
+    output $asus enable posision
+}
+
 profile clamshell_samsung {
     output eDP-1 disable
     output $samsung enable
+}
+
+profile clamshell_asus {
+    output eDP-1 disable
+    output $asus enable
+}
+
+profile desktop {
+    output $samsung enable -1920,0
+    output $asus enable
 }
 
 profile docked_hdmi {
