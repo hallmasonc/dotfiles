@@ -4,8 +4,9 @@
 useronly=(
     alacritty
     git
-    i3
+    kanshi
     rofi
+    sway
     zsh
 )
 

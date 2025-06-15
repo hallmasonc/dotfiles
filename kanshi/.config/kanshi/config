@@ -1,0 +1,22 @@
+output "Samsung Electric Company LF24T650F HCJR00722" {
+    alias $samsung
+}
+
+profile mobile {
+    output eDP-1 enable
+}
+
+profile docked_samsung {
+    output eDP-1 enable
+    output $samsung enable position -1920,0
+}
+
+profile clamshell_samsung {
+    output eDP-1 disable
+    output $samsung enable
+}
+
+profile docked_hdmi {
+    output eDP-1 enable
+    output HDMI-A-1 enable
+}

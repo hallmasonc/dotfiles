@@ -41,7 +41,7 @@ set $priDisp "eDP-1"
 #####################################################################################################################
 
 # Wallpaper
-#output * bg ~/path/to/wallpaper fit
+#output * bg $HOME/path/to/wallpaper fit
 
 # Font (default unless specified elsewhere)
 font	$fontMono	14
@@ -85,13 +85,13 @@ client.urgent           $red		$red			$bg			$red			$red
 ###################################################### Needs Testing ################################################ 
 
 # Start XDG autostart .desktop files using dex.
-exec --no-startup-id dex --autostart --environment i3
+#exec --no-startup-id dex --autostart --environment i3
 
 # xss-lock to grab logind suspend inhibit lock and use i3lock to lock the screen before suspend.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+#exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 # nm-applet is a desktop environment-independent system tray GUI for Network Manager.
-exec --no-startup-id nm-applet
+#exec --no-startup-id nm-applet
 
 #####################################################################################################################
 #################                                     Display                                       #################
@@ -100,6 +100,10 @@ exec --no-startup-id nm-applet
 
 # Set workspace 1 to the primary display
 workspace $ws1 output $priDisp
+
+# runs kanshi to detect clamshell mode
+bindswitch --reload --locked lid:on		output $priDisp disable
+bindswitch --reload --locked lid:off	output $priDisp enable
 
 #####################################################################################################################
 #################                                      Keybinds                                     #################
@@ -116,12 +120,12 @@ bindsym $priMod+Return	exec alacritty
 bindsym $priMod+e		exec thunar
 
 # Start launcher
-bindsym $priMod+space	exec --no-startup-id ".config/rofi/scripts/launcher_t3"
+bindsym $priMod+space	exec --no-startup-id "$HOME/.config/rofi/scripts/launcher_t3"
 # launcher fallback
 #bindsym $secMod+space 	exec --no-startup-id "rofi -modi drun,run -show drun -icon-theme \\"Papirus\\" -show-icons"
 
 # Start powermenu
-bindsym $priMod+BackSpace exec --no-startup-id ".config/rofi/scripts/powermenu_t1"
+bindsym $priMod+BackSpace exec --no-startup-id "$HOME/.config/rofi/scripts/powermenu_t1"
 
 # Use brightnessctl to adjust brightness of LCD
 bindsym XF86MonBrightnessUp		exec --no-startup-id brightnessctl set +5%
@@ -154,8 +158,8 @@ bindsym $priMod+control+9	workspace number $ws9
 bindsym $priMod+control+0	workspace number $ws10
 
 # Switch to workspaces using arrow keys; create workspace if it doesn't exist
-bindsym $priMod+control+Right	exec --no-startup-id ~/.config/sway/move_workspace.sh next
-bindsym $priMod+control+Left	exec --no-startup-id ~/.config/sway/move_workspace.sh prev
+bindsym $priMod+control+Right	exec --no-startup-id $HOME/.config/sway/scripts/move_workspace.sh next
+bindsym $priMod+control+Left	exec --no-startup-id $HOME/.config/sway/scripts/move_workspace.sh prev
 
 #####################################################################################################################
 #################                                   Window Focus                                    #################
@@ -240,7 +244,6 @@ mode "resize" {
 	# Return to default
 	bindsym Escape				mode $def
 	bindsym $priMod+r			mode $def
-	bindsym $priMod+q			mode $def
 	bindsym q					mode $def
 }
 
@@ -260,21 +263,20 @@ mode "move" {
 	
 	# Move focused window
 	bindsym $priMod+control+j		move left
+	bindsym $priMod+control+l		move right
 	bindsym $priMod+control+i		move up
 	bindsym $priMod+control+k		move down
-	bindsym $priMod+control+l		move right
 
 	# Move focused window with cursor keys
-	bindsym $priMod+control+Left	move left
+	bindsym $priMod+control+Left	exec --no-startup-id $HOME/.config/sway/scripts/move-window.sh prev
+	bindsym $priMod+control+Right	exec --no-startup-id $HOME/.config/sway/scripts/move-window.sh next
 	bindsym $priMod+control+Up		move up
 	bindsym $priMod+control+Down	move down
-	bindsym $priMod+control+Right	move right
 
 	# Return to default
-	bindsym Escape				mode $def
-	bindsym $priMod+m			mode $def
-	bindsym $priMod+q			mode $def        
-	bindsym q					mode $def
+	bindsym Escape					mode $def
+	bindsym $priMod+m				mode $def
+	bindsym q						mode $def
 }
 
 #####################################################################################################################
@@ -323,3 +325,10 @@ bindsym $priMod+Shift+c reload
 
 # exit sway (logs out of X session)
 bindsym $priMod+Shift+e exec "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your X session.' -B 'Yes, exit sway' 'swaymsg exit'"
+
+#####################################################################################################################
+#################                                     Services                                      #################
+#####################################################################################################################
+
+# include drop-in files
+include /etc/sway/config.d/*
