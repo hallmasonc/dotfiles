@@ -31,11 +31,16 @@ profile clamshell_asus {
 }
 
 profile desktop {
-    output $samsung enable position-1920,0
+    output $samsung enable position -1920,0
     output $asus enable
 }
 
 profile docked_hdmi {
     output eDP-1 enable
+    output HDMI-A-1 enable
+}
+
+profile fallback {
+    output DP-1 enable position -1920,0
     output HDMI-A-1 enable
 }
