@@ -3,10 +3,13 @@
 # folders that should, or only need to be installed for a local user
 useronly=(
     alacritty
+    #code
     git
     kanshi
     rofi
     sway
+    systemd
+    waybar
     zsh
 )
 

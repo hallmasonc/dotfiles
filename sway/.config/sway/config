@@ -41,7 +41,7 @@ set $priDisp "eDP-1"
 #####################################################################################################################
 
 # Wallpaper
-#output * bg $HOME/path/to/wallpaper fit
+output * bg $HOME/Pictures/Wallpapers/default.png fill
 
 # Font (default unless specified elsewhere)
 font	$fontMono	14
@@ -52,13 +52,13 @@ gaps	outer 3
 gaps	top 3
 gaps	bottom 3
 
-smart_gaps on # Remove gaps when only one window on screen
+#smart_gaps on # Remove gaps when only one window on screen
 
 # Borders
 default_border				pixel 3
 default_floating_border		pixel 3
 
-hide_edge_borders smart
+#hide_edge_borders smart
 
 # Colors
 set $bg		#282c34
@@ -72,7 +72,7 @@ set $cyan		#6cdcf7
 set $text		#dfdfdf
 
 # class                 border		background		text		indicator		child_border
-client.focused          $cyan		$bg				$text 		$cyan			$cyan
+client.focused          $purple		$bg				$text 		$purple			$purple
 client.focused_inactive $blue		$bg				$fg			$blue			$blue
 client.unfocused        $bg			$bg				$fg			$bg				$bg
 client.urgent           $red		$red			$bg			$red			$red
@@ -283,37 +283,8 @@ mode "move" {
 #################                                        Bar                                        #################
 #####################################################################################################################
 
-# Start swaybar
 bar {
-	font 		$fontMono, $fontAwesome, $fontPowerline \
-	position 	bottom
-	tray_output	primary
-	
-	colors {
-		# Background color
-		background $bg
-		
-		# Text color for blocks without defined color
-		statusline $fg
-		
-		# Workspaces 
-		# class				border		background	text
-		focused_workspace	$bg			$purple 	$text
-		inactive_workspace	$bg			$bg		 	$fg
-		active_workspace	$cyan		$bg		 	$fg
-		urgent_workspace	$red		$red 		$bg
-	}
-
-    status_command /usr/bin/bumblebee-status \
-	-m error nic cpu memory battery datetime \
-	-p battery.decorate="False" \
-	   datetime.format=" %A, %b %e %Y | %I:%M%p " \
-	   datetime.left-click="gsimplecal" \
-	   memory.format="{used}/{total} " \
-	   nic.exclude="lo, virbr0" \
-	   nic.status="up" \
-	   nic.format="{ssid} {state} {ip}" \
-	-t onedark-powerline
+	swaybar_command waybar
 }
 
 #####################################################################################################################

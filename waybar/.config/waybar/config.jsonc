@@ -1,0 +1,168 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 30, // Waybar height (to be removed for auto height)
+    "spacing": 4, // Gaps between modules (4px)
+    "modules-left": [
+      "sway/workspaces",
+      "idle_inhibitor",
+      //"sway/window",
+      "sway/mode",
+  ],
+    "modules-center": [
+      "clock"
+  ],
+    "modules-right": [
+      "pulseaudio",
+      "backlight",
+      "temperature",
+      "cpu",
+      "memory",
+      "network",
+      "battery",
+      "tray"
+  ],
+    // Modules configuration
+     "sway/workspaces": {
+         "disable-scroll": true,
+         "all-outputs": true,
+         "warp-on-scroll": false,
+         "format": "{name}",
+         //"format": "{icon} {name}",
+         "format-icons": {
+             "1": "<span foreground='#d19a66'> </span>",
+             "2": "<span foreground='#e5c07b'> </span>",
+             "3": "<span foreground='#98c379'> </span>",
+             "4": "<span foreground='#56b6c2'> </span>",
+             "5": "<span foreground='#61afef'>󰭻 </span>",
+             //"urgent": "",
+             //"focused": "",
+             "default": "<span foreground='#b5e8e0'> </span>"
+         }
+     },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": " ",
+            "deactivated": " "
+        },
+        "tooltip": true,
+    },
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "sway/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+    "clock": {
+        "format": "<span foreground='#98c379'> </span>{:%H:%M}",
+        "format-alt": "{:%A, %B %d, %Y (%R)}  ",
+        "timezone": "Europe/Warsaw",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "<span foreground='#98c379'> </span>{:%a, %d-%m-%Y}",
+        "calendar": {
+          "mode": "month",
+          "locale": "en_US.UTF-8" 
+        }
+    },
+    //"clock": {
+    //  "format": "<span foreground='#98c379'> </span>{:%H:%M}",
+    //  "format-alt": "{:%A, %B %d, %Y (%R)}  ",
+     // "tooltip-format": "<tt><small>{calendar}</small></tt>",
+     // "calendar": {
+     //   "mode"          : "year",
+     //   "mode-mon-col"  : 3,
+     //   "weeks-pos"     : "right",
+     //   "on-scroll"     : 1,
+     //   "on-click-right": "mode",
+     //   "format": {
+     //     "months":     "<span color='#ffead3'><b>{}</b></span>",
+     //     "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+     //     "weeks":      "<span color='#99ffdd'><b>'{:%W}}</b></span>",
+     //     "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+     //     "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+     //   }
+     // },
+     // "actions":  {
+     //   "on-click-right": "mode",
+     //   "on-click-forward": "tz_up",
+     //   "on-click-backward": "tz_down",
+     //   "on-scroll-up": "shift_up",
+     //   "on-scroll-down": "shift_down"
+     //   }
+    //},
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "<span foreground='#61afef'>{icon}</span> {volume}% {format_source}",
+        "format-bluetooth": "<span foreground='#61afef'>{icon}  </span>{volume}% {format_source}",
+        "format-bluetooth-muted": "<span foreground='#d08770'>{icon} </span> {format_source}",
+        "format-muted": "<span foreground='#d08770'>  </span>{format_source}",
+        "format-source": "<span foreground='#61afef'> </span>{volume}%",
+        "format-source-muted": "<span foreground='#d08770'> </span>",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "<span foreground='#e5c07b'>{icon} </span>{percent}%",
+        "format-icons": ["", "", "", "", "", "", "", "", ""],
+        "tooltip": false
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "<span foreground='#56b6c2'>{icon} </span>{temperatureC}°C",
+        "format-icons": ["", "", ""],
+        "tooltip": false
+    },
+    "cpu": {
+        "format": "<span foreground='#98c379'> </span>{usage}%",
+        "tooltip": false
+    },
+    "memory": {
+        "format": "<span foreground='#b48ead'> </span>{}%"
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        //"format-wifi": "<span foreground='#d19a66'>  </span>{essid} ({signalStrength}%)",
+        "format-wifi": "<span foreground='#d19a66'>  </span>{signalStrength}%",
+        "format-ethernet": "<span foreground='#d19a66'> </span>{ifname}",
+        "tooltip-format": "<span foreground='#d19a66'> </span>{ifname}",
+        "format-linked": "<span foreground='#d19a66'> </span>{ifname} (No IP)",
+        "format-disconnected": "<span foreground='#d19a66'>⚠ </span>dc'd",
+        "format-alt": "<span foreground='#d19a66'>{ifname}:</span> {ipaddr}/{cidr}"
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 15,
+            "critical": 10
+        },
+        "format": "<span foreground='#98c379'>{icon} </span> {capacity}%",
+        "format-charging": "<span foreground='#98c379'> </span>{capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-alt": "<span foreground='#98c379'>{icon} </span> {time}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "tray": {
+        // "icon-size": 15,
+        "spacing": 5 
+    }
+}
+
