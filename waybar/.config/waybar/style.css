@@ -1,86 +1,199 @@
+@import "one_dark.css";
+
 * {
-  font-family: "JetBrainsMono Nerd Font";
-  font-size: 12pt;
+  font-family: "Fira Mono","JetBrainsMono Nerd Font";
+  font-size: 14pt;
   border: none;
   border-radius: 0;
-  transition-property: background-color;
-  transition-duration: 0.5s;
-}
-window#waybar {
-  color: #dcddde;
-  background-color: #21222c;
   transition-duration: 0.5s;
   transition-property: background-color;
 }
-#workspaces {
-  margin-left: 10px;
-}
-#workspaces button {
-  background: #282c34;
-  color: #dcddde;
-  padding: 0 10px;
-}
-#workspaces button.focused {
-  /*color: #abb2bf;*/ /* light */
-  color: #21222c; /* dark */
-  /*border-bottom: 3px solid #61afef;*/ /* blue */
-  border-bottom: 3px solid #98c379; /* green */
-  background-color: rgba(171, 178, 191, 0.5); /* light */
-  /*background-color: rgba(40, 44, 52, 0.9);*/ /* dark */
-}
-#workspaces button.urgent {
-  color: #f7768e;
-}
-#workspaces button.persistent {
-  color: #414868;
-}
-#workspaces button:hover {
-  color: #dcddde;
-  background: #414868;
-  box-shadow: inherit;
-}
-#clock,
-#idle_inhibitor,
-#backlight,
-#temperature,
-#bluetooth,
-#network,
-#pulseaudio,
+
+/* Configuration - top bar - left */
 #cpu,
 #memory,
-#battery,
-#mode {
-  margin: 0px 2px;   /* gaps between modules */
+#custom-power,
+#temperature {
+  margin: 0px 4px;
   padding: 0.2rem 0.6rem;
-  color: #dcddde;
-  background: #282c34;
-  border-bottom: 1px solid #414868;
+  color : @text;
+  border-bottom: 3px solid @gutter;
 }
-#mode,
-#tray {
-  padding: 0 10px;
-  color: #b5e8e0;
+#cpu:hover {
+  color: @white;
+  border-bottom: 3px solid @green;
+}
+#memory:hover {
+  color: @white;
+  border-bottom: 3px solid @purple;
+}
+#custom-power:hover {
+  color: white;
+  border-bottom: 3px solid @accent;
+}
+#temperature:hover {
+  color: @white;
+  border-bottom: 3px solid @cyan;
+}
+#temperature.warning {
+  color: @orange2;
+}
+#temperature.critical {
+  color: @red2;
+}
+#temperature.warning:hover {
+  color: @orange2;
+  border-bottom: 3px solid @orange2;
+}
+#temperature.critical:hover {
+  color: @red2;
+  border-bottom: 3px solid @red2;
+}
+
+
+
+/* Configuration - top bar - center */
+window#waybar {
+  color: @white;
+  background: transparent;
+}
+
+/* Configuration - top bar - right */
+#backlight,
+#battery,
+#network,
+#pulseaudio {
+  margin: 0px 4px;
+  padding: 0.2rem 0.6rem;
+  color : @text;
+  border-bottom: 3px solid @gutter;
+}
+#backlight:hover {
+  color: @white;
+  border-bottom: 3px solid @orange2;
+}
+#battery:hover {
+  color: @white;
+  border-bottom: 3px solid @green;
+}
+#battery.warning:hover {
+  color: @white;
+  border-bottom: 3px solid @orange2;
+}
+#battery.critical:hover {
+  color: @white;
+  border-bottom: 3px solid @red2;
+}
+#battery.charging, #battery.plugged {
+  color: @green;
 }
 #battery.critical:not(.charging) {
+  color: @red;
   animation-name: blink;
   animation-duration: 0.5s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-direction: alternate;
-  color: #f7768e;
-  background-color: #282c34;
 }
-#battery.charging, #battery.plugged {
-  color: #9ece6a;
-  background-color: #282c34;
+#network:hover {
+  color: @white;
+  border-bottom: 3px solid @cyan;
 }
-#idle_inhibitor {
-  color: #b5e8e0;
+#pulseaudio:hover {
+  color: @white;
+  border-bottom: 3px solid @blue
 }
 
+
+/* Configuration - bottom bar - left */
+#custom-powermenu {
+  color: @accent;
+  margin: 0px 4px;
+  font-size: 18pt;
+  padding-right: 0.4rem;
+  border-bottom: 3px solid @gutter;
+}
+#custom-powermenu:hover {
+  color: @blue;
+  border-bottom: 3px solid @accent;
+}
+#workspaces {
+  margin-left: 5px;
+}
+#workspaces button {
+  color: @text;
+  padding: 0 10px;
+}
+#workspaces button.focused {
+  color: white;
+  border-bottom: 3px solid @cyan;
+}
+#workspaces button.urgent {
+  color: @red;
+}
+#workspaces button:hover {
+  color: white;
+  background: transparent;
+  border-bottom: 3px solid @purple;
+  box-shadow: inherit;
+}
+
+/* Configuration - bottom bar - center */
+#taskbar button {
+  color: @text;
+  padding: 0.5rem;
+  border-bottom: 3px solid @accent;
+}
+#taskbar button.active {
+  border-bottom: 3px solid @cyan;
+}
+#taskbar button:hover {
+  color: white;
+  background: transparent;
+  border-bottom: 3px solid @purple;
+  box-shadow: inherit;
+}
+
+/* Configuration - bottom bar - right */
+#clock {
+  color : @text;
+  border-bottom: 3px solid @gutter;
+}
+#clock:hover {
+  color: white;
+  border-bottom: 3px solid @purple;
+}
+
+
+/* Animation */
 @keyframes blink {
   to {
-    color: #abb2bf;
-    background-color: #282c34;
+    color: @light-grey;
+    background-color: @bg;
   }
+}
+#tray {
+  background: @bg;
+  border-bottom: 3px solid @gutter;
+}
+#mode:hover,
+#tray:hover {
+  color: white;
+  background: @light-grey;
+  border-bottom: 3px solid @yellow;
+  box-shadow: inherit;
+}
+#idle_inhibitor,
+#bluetooth,
+#mode {
+  margin: 0px 2px;   /* gaps between modules */
+  padding: 0.2rem 0.6rem;
+  color: @text;
+  background: @bg;
+  border-bottom: 3px solid @gutter;
+}
+#mode,
+#tray {
+  padding: 0 10px;
+  color: @accent;
 }

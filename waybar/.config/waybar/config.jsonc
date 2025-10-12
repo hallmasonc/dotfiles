@@ -1,168 +1,206 @@
-{
-    "layer": "top",
-    "position": "top",
-    "height": 30, // Waybar height (to be removed for auto height)
-    "spacing": 4, // Gaps between modules (4px)
-    "modules-left": [
-      "sway/workspaces",
-      "idle_inhibitor",
-      //"sway/window",
-      "sway/mode",
-  ],
-    "modules-center": [
-      "clock"
-  ],
-    "modules-right": [
-      "pulseaudio",
-      "backlight",
-      "temperature",
-      "cpu",
-      "memory",
-      "network",
-      "battery",
-      "tray"
-  ],
-    // Modules configuration
-     "sway/workspaces": {
-         "disable-scroll": true,
-         "all-outputs": true,
-         "warp-on-scroll": false,
-         "format": "{name}",
-         //"format": "{icon} {name}",
-         "format-icons": {
-             "1": "<span foreground='#d19a66'> </span>",
-             "2": "<span foreground='#e5c07b'> </span>",
-             "3": "<span foreground='#98c379'> </span>",
-             "4": "<span foreground='#56b6c2'> </span>",
-             "5": "<span foreground='#61afef'>󰭻 </span>",
-             //"urgent": "",
-             //"focused": "",
-             "default": "<span foreground='#b5e8e0'> </span>"
-         }
-     },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": " ",
-            "deactivated": " "
+[
+    {
+    // Configuration - top bar
+        "mod": "dock",
+        "layer": "bottom",
+        "position": "top",
+        "exclusive": true,
+        // "spacing": 3, // Gaps between modules (3px)
+        // "height": 30, // Waybar height (px)
+        
+    // Configuration - modules left
+        "modules-left": [
+            "temperature",
+            "memory",
+            "cpu",
+            "custom/power"
+        ],
+
+        "temperature": {
+            "critical-threshold": 90,
+            "warning-threshold": 70,
+            "hwmon-path": "/sys/class/hwmon/hwmon5/temp1_input",
+            "format": "<span foreground='#56b6c2'>{icon}</span> {temperatureC}°C",
+            "format-critical": "<span foreground='#be5046'>{icon}</span> {temperatureC}°C",
+            "format-warning": "<span foreground='#e6c07b'>{icon}</span> {temperatureC}°C",
+            "format-icons": ["", "", "", "", ""],
+            "tooltip": false
         },
-        "tooltip": true,
-    },
-    "sway/mode": {
-        "format": "<span style=\"italic\">{}</span>"
-    },
-    "sway/scratchpad": {
-        "format": "{icon} {count}",
-        "show-empty": false,
-        "format-icons": ["", ""],
-        "tooltip": true,
-        "tooltip-format": "{app}: {title}"
-    },
-    "clock": {
-        "format": "<span foreground='#98c379'> </span>{:%H:%M}",
-        "format-alt": "{:%A, %B %d, %Y (%R)}  ",
-        "timezone": "Europe/Warsaw",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "<span foreground='#98c379'> </span>{:%a, %d-%m-%Y}",
-        "calendar": {
-          "mode": "month",
-          "locale": "en_US.UTF-8" 
+        "memory": {
+            "format": "<span foreground='#c678dd'></span> {percentage}%",
+            "tooltip-format": "{used:0.1f}G/{total:0.1f}G"
+        },
+        "cpu": {
+            "format": "<span size='16pt' foreground='#98c379'></span> {usage}%",
+            "tooltip": false
+        },
+        "custom/power": {
+            "format" : "<span size='16pt' foreground='#528bff'></span>",
+            "tooltip": false,
+            "menu": "on-click",
+            "menu-file": "~/.config/waybar/menus/power_menu.xml",
+            "menu-actions": {
+                "powersave": "tuned-adm profile powersave",
+                "balanced": "tuned-adm profile balanced",
+                "performance": "tuned-adm profile throughput-performance"
+            },
+        },
+
+    // Configuration - modules center
+        "modules-center": [
+            "sway/window"
+        ],
+
+        "sway/window": {
+            "all-outputs": true,
+            "format": "{app_id}",
+            "tooltip": false,
+            "align": 0.5,
+            "justify": "center"
+        },
+
+
+    // Configuration - modules right
+    
+        "modules-right": [
+            "sway/mode",
+            "pulseaudio",
+            "backlight",
+            "network",
+            "battery",
+            "tray"
+        ],
+        
+        "sway/mode": {
+            "format": "<span style=\"italic\">{}</span>"
+        },
+        "sway/scratchpad": {
+            "format": "{icon} {count}",
+            "show-empty": false,
+            "format-icons": ["", ""],
+            "tooltip": true,
+            "tooltip-format": "{app}: {title}"
+        },
+        "pulseaudio": {
+            // "scroll-step": 1, // %, can be a float
+            "format": "{volume}% <span size='large' foreground='#61afef'>{icon}</span> | {format_source}",
+            "format-bluetooth": "{volume}% <span size='large' foreground='#61afef'>{icon} </span> | {format_source}",
+            "format-bluetooth-muted": "<span size='large' foreground='#e06c75'>{icon} </span> | {format_source}",
+            "format-muted": "<span size='large' foreground='#e06c75'>󰝟 </span> | {format_source}",
+            "format-source": "{volume}% <span foreground='#61afef'></span>",
+            "format-source-muted": "<span foreground='#e06c75'> </span>",
+            "format-icons": {
+                "headphone": "",
+                "hands-free": "",
+                "headset": "",
+                "phone": "",
+                "portable": "",
+                "car": "",
+                "default": ["󰕿", "󰖀", "󰕾"]
+            },
+            "tooltip": true,
+            "max-volume": 100,
+            "on-click": "pavucontrol"
+        },
+        "tray": {
+            // "icon-size": 15,
+            "spacing": 5 
+        },
+        "backlight": {
+            "format": "{percent}% <span foreground='#e6c07b'>{icon}</span>",
+            "format-icons": ["", "", "", "", "", "", "", "", ""],
+            "tooltip": false
+        },
+        "network": {
+            // "interface": "wlp2*", // (Optional) To force the use of this interface
+            "format-alt": "{ifname} <span foreground='#56b6c2'></span>",
+            "format-wifi": "{essid} <span foreground='#56b6c2'></span>",
+            "format-ethernet": "{ifname} <span foreground='#56b6c2'></span>",
+            "format-linked": "{ifname} (No IP) <span foreground='#56b6c2'></span>",
+            "format-disconnected": "Disconnected <span foreground='#56b6c2'>⚠</span>",
+            "tooltip-format": "{ipaddr}/<span foreground='#56b6c2'>{cidr}</span> - {signalStrength}% ",
+            "on-click-right": "alacritty --command nmtui"
+        },
+        "battery": {
+            "interval": 15,
+            "states": {
+                "good": 65,
+                "warning": 30,
+                "critical": 10
+            },
+            "format": "{capacity}% <span size='13.5pt' foreground='#98c379'>{icon}</span>",
+            "format-good": "{capacity}% <span size='13.5pt' foreground='#98c379'>{icon}</span>",
+            "format-warning": "{capacity}% <span size='13.5pt' foreground='#e6c07b'>{icon}</span>",
+            "format-critical": "{capacity}% <span size='13.5pt' foreground='#be5046'>{icon}</span>",
+            "format-charging": "{capacity}% <span size='13.5pt' foreground='#98c379'></span>",
+            // "format-plugged": "{capacity}% ",
+            "format-icons": ["", "", "", "", ""],
+            "tooltip-format" : "{timeTo}"
         }
     },
-    //"clock": {
-    //  "format": "<span foreground='#98c379'> </span>{:%H:%M}",
-    //  "format-alt": "{:%A, %B %d, %Y (%R)}  ",
-     // "tooltip-format": "<tt><small>{calendar}</small></tt>",
-     // "calendar": {
-     //   "mode"          : "year",
-     //   "mode-mon-col"  : 3,
-     //   "weeks-pos"     : "right",
-     //   "on-scroll"     : 1,
-     //   "on-click-right": "mode",
-     //   "format": {
-     //     "months":     "<span color='#ffead3'><b>{}</b></span>",
-     //     "days":       "<span color='#ecc6d9'><b>{}</b></span>",
-     //     "weeks":      "<span color='#99ffdd'><b>'{:%W}}</b></span>",
-     //     "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
-     //     "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
-     //   }
-     // },
-     // "actions":  {
-     //   "on-click-right": "mode",
-     //   "on-click-forward": "tz_up",
-     //   "on-click-backward": "tz_down",
-     //   "on-scroll-up": "shift_up",
-     //   "on-scroll-down": "shift_down"
-     //   }
-    //},
-    "pulseaudio": {
-        // "scroll-step": 1, // %, can be a float
-        "format": "<span foreground='#61afef'>{icon}</span> {volume}% {format_source}",
-        "format-bluetooth": "<span foreground='#61afef'>{icon}  </span>{volume}% {format_source}",
-        "format-bluetooth-muted": "<span foreground='#d08770'>{icon} </span> {format_source}",
-        "format-muted": "<span foreground='#d08770'>  </span>{format_source}",
-        "format-source": "<span foreground='#61afef'> </span>{volume}%",
-        "format-source-muted": "<span foreground='#d08770'> </span>",
-        "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""]
-        },
-        "on-click": "pavucontrol"
-    },
-    "backlight": {
-        // "device": "acpi_video1",
-        "format": "<span foreground='#e5c07b'>{icon} </span>{percent}%",
-        "format-icons": ["", "", "", "", "", "", "", "", ""],
-        "tooltip": false
-    },
-    "temperature": {
-        // "thermal-zone": 2,
-        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "critical-threshold": 80,
-        // "format-critical": "{temperatureC}°C {icon}",
-        "format": "<span foreground='#56b6c2'>{icon} </span>{temperatureC}°C",
-        "format-icons": ["", "", ""],
-        "tooltip": false
-    },
-    "cpu": {
-        "format": "<span foreground='#98c379'> </span>{usage}%",
-        "tooltip": false
-    },
-    "memory": {
-        "format": "<span foreground='#b48ead'> </span>{}%"
-    },
-    "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
-        //"format-wifi": "<span foreground='#d19a66'>  </span>{essid} ({signalStrength}%)",
-        "format-wifi": "<span foreground='#d19a66'>  </span>{signalStrength}%",
-        "format-ethernet": "<span foreground='#d19a66'> </span>{ifname}",
-        "tooltip-format": "<span foreground='#d19a66'> </span>{ifname}",
-        "format-linked": "<span foreground='#d19a66'> </span>{ifname} (No IP)",
-        "format-disconnected": "<span foreground='#d19a66'>⚠ </span>dc'd",
-        "format-alt": "<span foreground='#d19a66'>{ifname}:</span> {ipaddr}/{cidr}"
-    },
-    "battery": {
-        "states": {
-            // "good": 95,
-            "warning": 15,
-            "critical": 10
-        },
-        "format": "<span foreground='#98c379'>{icon} </span> {capacity}%",
-        "format-charging": "<span foreground='#98c379'> </span>{capacity}%",
-        "format-plugged": " {capacity}%",
-        "format-alt": "<span foreground='#98c379'>{icon} </span> {time}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
-    },
-    "tray": {
-        // "icon-size": 15,
-        "spacing": 5 
-    }
-}
+    {
+        // Bottom Bar Configuration
+        "mod": "dock",
+        "layer": "bottom",
+        "position": "bottom",
+        "output": ["eDP-1", "Acer Technologies ED270U P2 4335006903W01", "ASUSTek COMPUTER INC VG259QM M4LMQS208461"],
+        "exclusive": true,
+        "spacing": 3, // Gaps between modules (2px)
+        // "height": 30, // Waybar height (px)
 
+        // Configuration - modules left
+        "modules-left": [
+            "custom/powermenu",
+            "sway/workspaces"
+        ],
+    
+        "custom/powermenu": {
+            "format": "<span size='larger'> 󰣇 </span>",
+            "tooltip" : false,
+            "on-click": "$HOME/.config/rofi/scripts/powermenu_t1"
+        },
+        "sway/workspaces": {
+            "all-outputs": true,
+            "disable-scroll": true,
+            "warp-on-scroll": false,
+            "format": "{name}",
+            "persistent-workspaces": {
+                "1": [],
+                "2": [],
+                "3": []
+            }
+        },
+    
+        // Configuration - modules center
+        "modules-center": [
+            "wlr/taskbar"
+        ],
+
+        "wlr/taskbar": {
+            "all-outputs": true,
+            "icon-size": 28,
+            "format": "{icon} {app_id}",
+            "tooltip": false,
+            "on-click": "activate",
+            "on-click-middle": "close",
+            // "active-first": true,
+            "ignore-list": ["rofi"]
+        },
+    
+
+        // Configuration - modules right
+        "modules-right": [
+            "clock"
+        ],
+    
+        "clock": {
+            "timezone": "America/New_York",
+            "format": "{:%a, %D | %I:%M %p}<span foreground='#c678dd'>  </span>",
+            "tooltip-format": "<tt>{calendar}</tt>",
+            "calendar": {
+              "mode": "month",
+              "locale": "en_US.UTF-8" 
+            }
+        }
+    }
+]
