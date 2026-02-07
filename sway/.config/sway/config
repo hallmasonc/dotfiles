@@ -1,4 +1,3 @@
-# sway config file
 #####################################################################################################################
 #################                              Define modifier key(s)                               #################
 #####################################################################################################################
@@ -30,11 +29,6 @@ set $ws10 	"10"
 
 # Fonts
 set $fontMono		pango:Fira Mono
-set $fontAwesome	Font Awesome v4 Compatibility
-set $fontPowerline	PowerlineSymbols
-
-# Named Displays
-set $priDisp "eDP-1"
 
 #####################################################################################################################
 #################                                   Appearance                                      #################
@@ -47,68 +41,47 @@ output * bg $HOME/Pictures/Wallpapers/default.png fill
 font	$fontMono	14
 
 # Gaps
-gaps	inner 5
-gaps	outer 3
-gaps	top 3
-gaps	bottom 3
-
-#smart_gaps on # Remove gaps when only one window on screen
+gaps	inner 10
+gaps	outer 2
 
 # Borders
-default_border				pixel 3
-default_floating_border		pixel 3
-
-#hide_edge_borders smart
+default_border				pixel 2
+default_floating_border		pixel 2
 
 # Colors
 set $bg		#282c34
 set $fg		#abb2bf
-set $red		#eb6e67
-set $green		#95ee8f
+set $accent	#528bff
+set $red	#eb6e67
+set $green	#95ee8f
 set $yellow	#f8c456
-set $blue		#6eaafb
+set $blue	#6eaafb
 set $purple	#c678dd
-set $cyan		#6cdcf7
-set $text		#dfdfdf
+set $cyan	#6cdcf7
+set $text	#dfdfdf
 
 # class                 border		background		text		indicator		child_border
-client.focused          $purple		$bg				$text 		$purple			$purple
+client.focused          $cyan		$bg				$text 		$cyan			$cyan
 client.focused_inactive $blue		$bg				$fg			$blue			$blue
-client.unfocused        $bg			$bg				$fg			$bg				$bg
-client.urgent           $red		$red			$bg			$red			$red
-
-#####################################################################################################################
-#################                                     Startup                                       #################
-################# All startup tasks, scripts, and sequences go here. (Session locks, standby, etc.) #################
-#####################################################################################################################
-
-###################################################### Needs Testing ################################################ 
-
-# Start XDG autostart .desktop files using dex.
-#exec --no-startup-id dex --autostart --environment i3
-
-# xss-lock to grab logind suspend inhibit lock and use i3lock to lock the screen before suspend.
-#exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-
-# nm-applet is a desktop environment-independent system tray GUI for Network Manager.
-#exec --no-startup-id nm-applet
+client.unfocused        $accent		$bg				$fg			$accent			$accent
+client.urgent           $red		$bg				$text		$red			$red
 
 #####################################################################################################################
 #################                                     Display                                       #################
-#################      Configure your primary display in .xprofile using xrandr and autorandr.      #################
+#################           Configure your kanshi profiles in $HOME/.config/kanshi/config           #################
 #####################################################################################################################
 
-# Set workspace 1 to the primary display
-workspace $ws1 output $priDisp
-
-# runs kanshi to detect clamshell mode
-bindswitch --reload --locked lid:on		output $priDisp disable
-bindswitch --reload --locked lid:off	output $priDisp enable
+# runs kanshi after switching to clamshell mode
+bindswitch --reload --locked lid:on		exec_always "kanshictl switch clamshell_asus || kanshictl switch clamshell_acer || systemctl suspend"
+bindswitch --reload --locked lid:off	exec_always "systemctl restart --user kanshi.service"
 
 #####################################################################################################################
 #################                                      Keybinds                                     #################
 #################     Keybinds for applications only. Window and container binds will be later.     #################
 #####################################################################################################################
+
+# Lock screen
+bindsym $priMod+l		exec swaylock
 
 # Kill focused window
 bindsym $priMod+q		kill
@@ -121,25 +94,49 @@ bindsym $priMod+e		exec thunar
 
 # Start launcher
 bindsym $priMod+space	exec --no-startup-id "$HOME/.config/rofi/scripts/launcher_t3"
-# launcher fallback
-#bindsym $secMod+space 	exec --no-startup-id "rofi -modi drun,run -show drun -icon-theme \\"Papirus\\" -show-icons"
 
 # Start powermenu
 bindsym $priMod+BackSpace exec --no-startup-id "$HOME/.config/rofi/scripts/powermenu_t1"
 
-# Use brightnessctl to adjust brightness of LCD
-bindsym XF86MonBrightnessUp		exec --no-startup-id brightnessctl set +5%
-bindsym XF86MonBrightnessDown	exec --no-startup-id brightnessctl set 5%-
+# Start browser
+bindsym $priMod+j		exec "flatpak run io.gitlab.librewolf-community"
 
+# Start ide
+bindsym $priMod+i		exec codium
 
-###################################################### Needs Testing ################################################ 
+# Screen brightness controls
+bindsym XF86MonBrightnessUp		exec --no-startup-id "brightnessctl set +5%"
+bindsym XF86MonBrightnessDown	exec --no-startup-id "brightnessctl set 5%-"
+
+# Fine screen brightness controls
+bindsym control+XF86MonBrightnessUp		exec --no-startup-id "brightnessctl set +1%"
+bindsym control+XF86MonBrightnessDown	exec --no-startup-id "brightnessctl set 1%-"
+
+# Launcher fallback
+#bindsym $secMod+space 	exec --no-startup-id "rofi -modi drun,run -show drun -icon-theme \\"Papirus\\" -show-icons"
+
 # Use pactl to adjust volume in PulseAudio.
-set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume	exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume	exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMute			exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute		exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+bindsym XF86AudioRaiseVolume	exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%
+bindsym XF86AudioLowerVolume	exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%
+bindsym XF86AudioMute			exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute		exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
+
+#####################################################################################################################
+#################                                 Window Switching                                  #################
+#####################################################################################################################
+
+# Move focused window
+bindsym $priMod+Shift+j		move left
+bindsym $priMod+Shift+l		move right
+bindsym $priMod+Shift+i		move up
+bindsym $priMod+Shift+k		move down
+
+# Move focused window with cursor keys
+bindsym $priMod+Shift+Right	exec --no-startup-id $HOME/.config/sway/scripts/move_window.sh next
+bindsym $priMod+Shift+Left	exec --no-startup-id $HOME/.config/sway/scripts/move_window.sh prev
+bindsym $priMod+Shift+Up	move up
+bindsym $priMod+Shift+Down	move down
 
 #####################################################################################################################
 #################                                Workspace Switching                                #################
@@ -158,6 +155,10 @@ bindsym $priMod+control+9	workspace number $ws9
 bindsym $priMod+control+0	workspace number $ws10
 
 # Switch to workspaces using arrow keys; create workspace if it doesn't exist
+bindsym $priMod+control+l		exec --no-startup-id $HOME/.config/sway/scripts/move_workspace.sh next
+bindsym $priMod+control+j		exec --no-startup-id $HOME/.config/sway/scripts/move_workspace.sh prev
+
+# Switch to workspaces using cursor keys; create workspace if it doesn't exist
 bindsym $priMod+control+Right	exec --no-startup-id $HOME/.config/sway/scripts/move_workspace.sh next
 bindsym $priMod+control+Left	exec --no-startup-id $HOME/.config/sway/scripts/move_workspace.sh prev
 
@@ -166,23 +167,20 @@ bindsym $priMod+control+Left	exec --no-startup-id $HOME/.config/sway/scripts/mov
 #####################################################################################################################
 
 # Change focus
-bindsym $priMod+Shift+j		focus left
-bindsym $priMod+Shift+i		focus up
-bindsym $priMod+Shift+k		focus down
-bindsym $priMod+Shift+l		focus right
+# bindsym $priMod+j		focus left
+# bindsym $priMod+i		focus up
+# bindsym $priMod+k		focus down
+# bindsym $priMod+l		focus right
 
 # Change focus with cursor keys
-bindsym $priMod+Shift+Left	focus left
-bindsym $priMod+Shift+Down	focus down
-bindsym $priMod+Shift+Up	focus up
-bindsym $priMod+Shift+Right	focus right
+bindsym $priMod+Left	focus left
+bindsym $priMod+Down	focus down
+bindsym $priMod+Up		focus up
+bindsym $priMod+Right	focus right
 
 #####################################################################################################################
 #################                                  Window Layouts                                   #################
 #####################################################################################################################
-
-# place calendar at bottom right of screen
-for_window [class="(?i)gsimplecal"] floating enable, move position center
 
 # Split windows horizontally
 bindsym $priMod+h		split h
@@ -261,18 +259,6 @@ mode "move" {
 	bindsym $priMod+control+9		move window to workspace number $ws9
 	bindsym $priMod+control+0		move window to workspace number $ws10
 	
-	# Move focused window
-	bindsym $priMod+control+j		move left
-	bindsym $priMod+control+l		move right
-	bindsym $priMod+control+i		move up
-	bindsym $priMod+control+k		move down
-
-	# Move focused window with cursor keys
-	bindsym $priMod+control+Left	exec --no-startup-id $HOME/.config/sway/scripts/move-window.sh prev
-	bindsym $priMod+control+Right	exec --no-startup-id $HOME/.config/sway/scripts/move-window.sh next
-	bindsym $priMod+control+Up		move up
-	bindsym $priMod+control+Down	move down
-
 	# Return to default
 	bindsym Escape					mode $def
 	bindsym $priMod+m				mode $def
@@ -283,9 +269,7 @@ mode "move" {
 #################                                        Bar                                        #################
 #####################################################################################################################
 
-bar {
-	swaybar_command waybar
-}
+bar swaybar_command waybar
 
 #####################################################################################################################
 #################                             Reload, Restart, and Exit                             #################

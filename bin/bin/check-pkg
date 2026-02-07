@@ -1,0 +1,208 @@
+#!/usr/bin/env bash
+
+## source(s)
+# shellcheck disable=SC1091
+source "$HOME/bin/lib/bash-prints"
+
+## variable(s)
+SCRIPT_NAME="${0##*/}"
+PKG_MGR=""
+DETECT_ARG=""
+SEARCH_ARG=""
+INSTALL_ARG=""
+dependencies=(getopt)
+required_pkgs=()
+optional_pkgs=()
+
+## function(s)
+usage() {
+    cat << EOF
+Usage: $SCRIPT_NAME [options] [packages]
+
+Options:
+-r, --required   Comma-separated list of required packages (Default when no flags are passed)
+-o, --optional   Comma-separated list of optional packages
+
+Example:
+$SCRIPT_NAME git curl
+$SCRIPT_NAME -r git,curl -o wget -c nodejs
+EOF
+    exit 1
+}
+
+parse_args () {
+    # if no flags are set, then treat all arguements as required
+    if [[ $# -gt 0 && "$1" != -* ]]; then
+        required_pkgs=("$@")
+        return
+    fi
+
+    # parse flags
+    local TEMP=""
+    if ! TEMP=$(getopt -n "$SCRIPT_NAME" -o r:o: --long required:,optional: -- "$@"); then
+        error_print "Failed to run 'getopt' command. Exiting $SCRIPT_NAME..." >&2
+        exit 1
+    fi
+
+    # set positional parameters
+    eval set -- "$TEMP"
+
+    # populate arrays
+    while true; do
+        case $1 in
+            -r | --required)
+                IFS=',' read -r -a required_pkgs <<< "$2"
+                shift 2
+                ;;
+            -o | --optional)
+                IFS=',' read -r -a optional_pkgs <<< "$2"
+                shift 2
+                ;;
+            --)
+                shift
+                break
+                ;;
+        esac
+    done
+}
+
+detect_pkgmgr () {
+    # set package manager in order of precedence (last in array is checked first)
+    # i.e. pacman will be used before yay
+    pkg_mgrs=("yay" "pacman")
+    for mgr in "${pkg_mgrs[@]}"; do
+        if command -v "$mgr" &> /dev/null; then
+            case $mgr in
+                pacman|yay )
+                    detect_arg="-Qqs"
+                    search_arg="-Ssq"
+                    install_arg="-S"
+                    ;;
+                * )
+                    error_print "No suitable package manager found. Exiting $SCRIPT_NAME..." >&2
+                    exit 1
+                    ;;
+            esac
+
+            # assign calling function's variable
+            if [[ -n "$1" ]]; then
+                eval "$1='$mgr'"
+            fi
+            # assign calling function's variable
+            if [[ -n "$2" ]]; then
+                eval "$2='$detect_arg'"
+            fi
+            # assign calling function's variable
+            if [[ -n "$3" ]]; then
+                eval "$3='$search_arg'"
+            fi
+            # assign calling function's variable
+            if [[ -n "$4" ]]; then
+                eval "$4='$install_arg'"
+            fi
+        fi
+    done
+}
+
+detect_pkg () {
+    local l_pkgmgr="$1"
+    local l_detectarg="$2"
+    local l_pkg="$3"
+
+    if ! "$l_pkgmgr" "$l_detectarg" "$l_pkg" &> /dev/null; then
+        info_print "Package $l_pkg was not found on local system."
+        return 1
+    else
+        if [[ $l_pkg != "getopt" ]]; then
+            info_print "Package $l_pkg was found on the system."
+        fi
+        return 0
+    fi
+}
+
+search_pkg () {
+    local l_pkgmgr="$1"
+    local l_searcharg="$2"
+    local l_pkg="$3"
+
+    if ! "$l_pkgmgr" "$l_searcharg" "$l_pkg" &> /dev/null; then
+        error_print "Package $l_pkg could not be found in remote repository, check spelling and run again."
+        exit 1
+    else
+        info_print "Package $l_pkg was found in the remote repository."
+        return 0
+    fi
+
+}
+
+install_pkg () {
+    local l_pkgmgr="$1"
+    local l_installarg="$2"
+    local l_pkg="$3"
+    local l_required="${4:-false}"
+    local l_prompt=""
+
+    case $l_required in
+        true  ) l_prompt="Required package $l_pkg is missing. Do you want to install this package? (y/N): ";;
+        false ) l_prompt="Optional package $l_pkg is missing. Do you want to install this package? (y/N): ";;
+    esac
+
+    input_print "$l_prompt"
+    read -r user_install
+
+    case $user_install in
+        y|Y )   
+            info_print "Installing $l_pkg..."
+            "$l_pkgmgr" "$l_installarg" "$l_pkg"
+            ;;
+        * )
+            if [ "$l_required" = true ]; then
+                error_print "Required package $l_pkg is not installed. Exiting $SCRIPT_NAME..." >&2
+                exit 1
+            else
+                info_print "Optional package $l_pkg will not be installed."
+            fi
+            ;;
+    esac
+}
+
+## main
+main () {
+    parse_args "$@"
+
+    # check required packages
+    for pkg in "${required_pkgs[@]}"; do
+        if ! detect_pkg "$PKG_MGR" "$DETECT_ARG" "$pkg"; then
+            if search_pkg "$PKG_MGR" "$SEARCH_ARG" "$pkg"; then
+                install_pkg "$PKG_MGR" "$INSTALL_ARG" "$pkg" true
+            fi
+        fi
+    done
+
+    # check optional packages
+    for pkg in "${optional_pkgs[@]}"; do
+        if ! detect_pkg "$PKG_MGR" "$DETECT_ARG" "$pkg"; then
+            if search_pkg "$PKG_MGR" "$SEARCH_ARG" "$pkg"; then
+                install_pkg "$PKG_MGR" "$INSTALL_ARG" "$pkg" false
+            fi
+        fi     
+    done
+}
+
+# display usage text if no arguments are supplied
+if [ $# -eq 0 ]; then
+    usage
+else
+    # detect and set package manager w/ arguments
+    detect_pkgmgr "PKG_MGR" "DETECT_ARG" "SEARCH_ARG" "INSTALL_ARG"
+    # check for current script's dependencies
+    for dep in "${dependencies[@]}"; do
+        if ! detect_pkg "$PKG_MGR" "$DETECT_ARG" "$dep"; then
+            install_pkg "$PKG_MGR" "$INSTALL_ARG" "$dep" true
+        fi
+    done
+    # init main
+    main "$@"
+fi
+
+exit 0

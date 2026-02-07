@@ -1,21 +1,29 @@
 #!/usr/bin/env bash
 
-# Variables
-theme="themes/one_dark.toml"
-script="print_colors.sh"
-
-dir="${HOME}/.config/alacritty"
+## variable(s)
+dir="$HOME/.config/alacritty"
 remote="https://raw.githubusercontent.com/alacritty/alacritty-theme/refs/heads/master"
+script="print_colors.sh"
+theme="themes/one_dark.toml"
 
-remoteTheme="${remote}/${theme}"
-remoteScript="${remote}/${script}"
+## function(s)
+main () {
+    # make directory
+    mkdir -p "$dir/themes"
 
-# Make $dir recursively
-mkdir -p "$dir/themes"
+    # change directory
+    cd "$dir" &> /dev/null|| exit
 
-# Change directory $dir
-cd "$dir"
+    # cURL download alacritty theme and the print_colors.sh script
+    curl -L "$remote/$theme" -o "$dir/$theme"
+    curl -L "$remote/$script" -o "$dir/$script"
 
-# cURL download alacritty theme and the print_colors.sh script
-curl -L $remoteTheme -o "$dir/$theme"
-curl -L $remoteScript -o "$dir/$script"
+    # return to previous directory
+    cd - &> /dev/null || exit
+
+    # make script executable
+    chmod +x "$dir/$script"
+}
+
+## main
+main

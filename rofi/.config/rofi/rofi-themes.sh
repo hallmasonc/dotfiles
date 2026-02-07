@@ -1,36 +1,42 @@
 #!/bin/bash
 
-## Variables
-rofi="https://github.com/hallmasonc/rofi"
-rofiDir="$HOME/.config/rofi.git"
+## source(s)
+source ./lib/bash-prints
 
-## Functions
-# git clone function
-cloneFunction () {
-    if [ -d "$2" ]; then
-        echo "Directory already exists; overwriting!"
+## variable(s)
+rofi_repo="https://github.com/adi1090x/rofi"
+rofi_dir="$HOME/.config/rofi.git"
+rofi_launcher="$HOME/.config/rofi/launchers/type-3/launcher.sh"
+rofi_power="$HOME/.config/rofi/powermenu/type-1/powermenu.sh"
+launcher_theme='style-10'
+power_theme='style-3'
 
-        # remove target directory
-        rm -rf $2
+## function(s)
+git_clone () {
+    info_print "Attempting to clone into: $2"
+
+    if git clone "$1" "$2"; then
+        info_print "Clone successful!"
+    else
+        error_print "Clone failed for $1"
+        exit 1
     fi
-
-    # clone
-    git clone $1 $2
 }
-# main function
+
 main () {
-    # clone rofi themes
-    cloneFunction $rofi $rofiDir
-
-    # change directory to newly cloned directory
-    cd $rofiDir
-
-    # run rofi setup.sh
-    bash ./setup.sh
+    # clone repo
+    git_clone $rofi_repo "$rofi_dir"
     
-    # change to previous directory
-    cd -
+    # setup rofi themes
+    cd "$rofi_dir" || exit
+    bash ./setup.sh
+    cd - || exit
+
+    # modify rofi themes
+    sed -i "s|^theme=.*|theme='${launcher_theme}'|" "$rofi_launcher"
+    sed -i "s|^theme=.*|theme='${power_theme}'|" "$rofi_power"
+
 }
 
-## Run main
+## init main
 main

@@ -1,0 +1,35 @@
+font=Fira Mono
+clock
+screenshots
+indicator-idle-visible
+indicator-thickness=8
+
+grace=0.6
+fade-in=0.3
+effect-blur=9x4
+effect-vignette=0.7:0.9
+
+timestr=%I:%M %p
+datestr=%a, %b %-d
+
+text-color=abb2bf
+text-caps-lock-color=abb2bf
+
+key-hl-color=528bff
+bs-hl-color=be5046
+separator-color=528bff
+
+ring-color=56b6c2
+ring-ver-color=528bff
+ring-wrong-color=be5046
+ring-clear-color=f8c456
+
+line-color=282c34
+line-ver-color=528bff
+line-wrong-color=be5046
+line-clear-color=f8c456
+
+inside-color=282c34
+inside-ver-color=528bff
+inside-wrong-color=be5046
+inside-clear-color=f8c456

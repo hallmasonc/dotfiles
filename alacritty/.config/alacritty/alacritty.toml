@@ -10,4 +10,3 @@ import = [
 [cursor]
 style = { shape = "Beam", blinking = "Always" }
 blink_interval = 500
-blink_timeout = 0

@@ -6,6 +6,18 @@ output "ASUSTek COMPUTER INC VG259QM M4LMQS208461" {
     alias $asus
 }
 
+output "Acer Technologies ED270U P2 4335006903W01"{
+    alias $acerL
+    mode 2560x1440@143.999
+    position 0,0
+}
+
+output "Acer Technologies ED270U P2 43350079F3W01"{
+    alias $acerR
+    mode 2560x1440@144.007
+    position 2560,0
+}
+
 profile mobile {
     output eDP-1 enable
 }
@@ -33,6 +45,13 @@ profile clamshell_asus {
 profile desktop {
     output $samsung enable position -1920,0
     output $asus enable
+}
+
+profile work {
+    output eDP-1 disable
+    output $acerL enable
+    output $acerR enable
+    exec swaymsg workspace 1, move workspace to output '"Acer Technologies ED270U P2 4335006903W01"'
 }
 
 profile docked_hdmi {

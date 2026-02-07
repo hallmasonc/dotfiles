@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+#
+# Look into logging.ini for python
+#
+# Inspired by https://gist.githubusercontent.com/niftycode/fd1442c624798c5f2773db0b443827cc/raw/8de770c472f2982ad0a232caf8e7ca734049a5d8/createPythonProject.sh
+#
+
+## variable(s)
+proj_path="$HOME/git/github/hallmasonc"
+
+## function(s)
+bash_struct () {
+    touch .gitignore
+    cd src
+    mkdir lib packages
+
+cat > main.sh  << EOF
+#!/usr/bin/env bash
+
+## variable(s)
+
+## function(s)
+
+## main
+EOF
+    cd -
+}
+
+python_stuct () {
+cat > .gitignore << EOF
+.env
+.venv
+EOF
+    cd src
+    mkdir modules packages
+    touch requirements.txt
+
+cat > main.py  << EOF
+#!/usr/bin/env python3
+
+if __name__ == '__main__':
+    main()
+EOF
+    cd -
+
+    read -p "[?] Do you need a virtual enviroment? (Y/n)" venv
+    venv=${venv:-Y}
+
+    if [ $venv = "Y"]; then
+        echo "[+] Creating a new virtual environment..."
+        python3 -m venv .venv
+    else
+        echo "[-] A virtual environment will not be created."
+    fi
+}
+
+## main
+echo "[?] Enter a project name:"
+read name
+
+echo -e "[?] Enter a project type (python/\033[1mbash\033[0m) (bash - default):"
+read type
+
+mkdir $proj_path/$name
+cd $proj_path/$name
+mkdir docs src
+cd docs
+touch TODO.MD
+cd -
+
+cat > README.md << EOF
+# $name
+EOF
+
+if [ $type = "python" ]; then
+    python_stuct
+else
+    bash_struct
+fi
+
+echo "[!] DONE!"
