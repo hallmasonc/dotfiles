@@ -11,6 +11,7 @@ fastfetch
 ## alias(es)
 alias cat='bat'
 alias code='flatpak run com.vscodium.codium'
+alias codium='flatpak run com.vscodium.codium'
 alias diff='batdiff'
 alias grep='batgrep'
 alias lj='ls --color=auto --group-directories-first -ahl'
@@ -79,3 +80,4 @@ fi
 # environment variables
 export BAT_THEME=OneHalfDark
 export PATH=$HOME/bin:$PATH
+export EDITOR=nano

@@ -5,6 +5,7 @@ fastfetch
 ## alias(es)
 alias cat='bat'
 alias code='flatpak run com.vscodium.codium'
+alias codium='flatpak run com.vscodium.codium'
 alias diff='batdiff'
 alias grep='batgrep'
 alias lj='ls --color=auto --group-directories-first -ahl'
@@ -23,6 +24,7 @@ fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 # environmnet variables
 export BAT_THEME=OneHalfDark
 export PATH=$HOME/bin:$PATH
+export EDITOR=nano
 
 # double whitespace included for better aesthetics in final .zshrc
 

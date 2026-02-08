@@ -71,26 +71,26 @@ create_key () {
     # check for prefered ciphers
     if openssl list -public-key-algorithms | grep -q "ED25519"; then
         # user input
-        input_print "Enter file in which to save the key (Default: /home/masonhall/.ssh/id_ed25519): "
+        input_print "Enter file in which to save the key (Default: $SSH_DIR/id_ed25519): "
         read -r l_privkey
         
         # set l_privkey if no input
         if [[ -z "$l_privkey" ]]; then
-            l_privkey="$SSH_DIR/$l_privkey"
+            l_privkey="id_ed25519"
         fi
 
-        ssh-keygen -t ed25519 -f "$l_privkey"
+        ssh-keygen -t ed25519 -f "$SSH_DIR/$l_privkey"
     else
         # user input
-        input_print "Enter file in which to save the key (Default: /home/masonhall/.ssh/id_rsa): "
+        input_print "Enter file in which to save the key (Default: $SSH_DIR/id_rsa): "
         read -r l_privkey
         
         # set l_privkey if no input
         if [[ -z "$l_privkey" ]]; then
-            l_privkey="$SSH_DIR/$l_privkey"
+            l_privkey="id_rsa"
         fi
 
-        ssh-keygen -t rsa -b 4096 -f "$l_privkey"
+        ssh-keygen -t rsa -b 4096 -f "$SSH_DIR/$l_privkey"
     fi
 
     # assign calling function's variable
@@ -121,7 +121,7 @@ main () {
             * ) create_key "PRIV_KEY";;
         esac
     else
-        create_key "PRIV_KEY"c
+        create_key "PRIV_KEY"
     fi
 
     # authenticate w/ github-cli
