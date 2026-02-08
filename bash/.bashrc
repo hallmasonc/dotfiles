@@ -79,5 +79,7 @@ fi
 
 # environment variables
 export BAT_THEME=OneHalfDark
-export PATH=$HOME/bin:$PATH
 export EDITOR=nano
+export GIT_AUTHOR_EMAIL="71787606+hallmasonc@users.noreply.github.com"
+export GIT_AUTHOR_NAME="Mason Hall"
+export PATH=$HOME/bin:$PATH

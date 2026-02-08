@@ -23,8 +23,10 @@ fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
 # environmnet variables
 export BAT_THEME=OneHalfDark
-export PATH=$HOME/bin:$PATH
 export EDITOR=nano
+export GIT_AUTHOR_EMAIL="71787606+hallmasonc@users.noreply.github.com"
+export GIT_AUTHOR_NAME="Mason Hall"
+export PATH=$HOME/bin:$PATH
 
 # double whitespace included for better aesthetics in final .zshrc
 

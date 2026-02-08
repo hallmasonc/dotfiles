@@ -153,7 +153,7 @@ install_pkg () {
     case $user_install in
         y|Y )   
             info_print "Installing $l_pkg..."
-            "$l_pkgmgr" "$l_installarg" "$l_pkg"
+            sudo "$l_pkgmgr" "$l_installarg" "$l_pkg"
             ;;
         * )
             if [ "$l_required" = true ]; then
