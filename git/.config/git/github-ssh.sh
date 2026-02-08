@@ -76,7 +76,7 @@ create_key () {
         
         # set l_privkey if no input
         if [[ -z "$l_privkey" ]]; then
-            l_privkey="$SSH_DIR/id_ed25519"
+            l_privkey="$SSH_DIR/$l_privkey"
         fi
 
         ssh-keygen -t ed25519 -f "$l_privkey"
@@ -87,7 +87,7 @@ create_key () {
         
         # set l_privkey if no input
         if [[ -z "$l_privkey" ]]; then
-            l_privkey="$SSH_DIR/id_rsa"
+            l_privkey="$SSH_DIR/$l_privkey"
         fi
 
         ssh-keygen -t rsa -b 4096 -f "$l_privkey"

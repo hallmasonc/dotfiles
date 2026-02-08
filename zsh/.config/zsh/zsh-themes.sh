@@ -119,7 +119,7 @@ main () {
     sed -i 's/^ZSH_THEME="[^"]*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' $zshrc_file
 
     # change interactive shell to zsh
-    chsh -s $(which zsh)
+    chsh -s /usr/bin/zsh
 
     # add .zshrc content to top of file
     sed -i "0r ${original}" $zshrc_file

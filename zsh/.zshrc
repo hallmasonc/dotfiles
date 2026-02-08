@@ -1,9 +1,10 @@
+# STOW-OVERRIDE-BLOCK
 # run fastfetch at startup
 fastfetch
 
 ## alias(es)
 alias cat='bat'
-alias code='codium'
+alias code='flatpak run com.vscodium.codium'
 alias diff='batdiff'
 alias grep='batgrep'
 alias lj='ls --color=auto --group-directories-first -ahl'

@@ -1,12 +1,16 @@
 # shellcheck disable=SC2148
 # ~/.bashrc
 
+# STOW-OVERRIDE-BLOCK
 # if not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# run fastfetch at startup
+fastfetch
+
 ## alias(es)
 alias cat='bat'
-alias code='codium'
+alias code='flatpak run com.vscodium.codium'
 alias diff='batdiff'
 alias grep='batgrep'
 alias lj='ls --color=auto --group-directories-first -ahl'
@@ -69,7 +73,7 @@ set_bash_prompt() {
 if [ "$TERM" = linux ]; then
     PROMPT_COMMAND=set_bash_prompt
 else
-    eval "$(oh-my-posh init bash --config "$HOME"/.cache/oh-my-posh/themes/stelbent.minimal.omp.json)"
+    eval "$($HOME/bin/oh-my-posh init bash --config "$HOME"/.cache/oh-my-posh/themes/stelbent.minimal.omp.json)"
 fi
 
 # environment variables

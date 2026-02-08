@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# folders that should, or only need to be installed for a local user
+# folders - local user
 useronly=(
     alacritty
     bash
@@ -22,14 +22,16 @@ useronly=(
 # change directory
 cd "$HOME/.dotfiles/" || exit
 
-# run the stow command for the passed in directory ($2) in location $1
-stowit() {
-    usr=$1
-    app=$2
-    # -v verbose
-    # -R recursive
-    # -t target
-    stow --no-folding -v -R -t "${usr}" "${app}"
+stow_over () {
+    if [[ "$(whoami)" != "root" ]]; then
+        stow -v -R --no-folding --override="/$1/" -t "$2" "$3"
+    fi
+}
+
+stowit () {
+    if [[ "$(whoami)" != "root" ]]; then
+        stow -v -R --no-folding -t "$1" "$2"
+    fi
 }
 
 echo "###    Stowing apps for user: $(whoami)    ###"
@@ -37,9 +39,24 @@ echo ""
 
 # install only user space folders
 for app in "${useronly[@]}"; do
-    if [[ "$(whoami)" != "root" ]]; then
-        stowit "${HOME}" "$app"
-    fi
+    case $app in
+        bash )
+            if ! grep -q STOW-OVERRIDE-BLOCK "$HOME/.bashrc"; then    
+                stow_over ".bashrc" "${HOME}" "$app"
+            else
+                stowit "${HOME}" "$app"
+            fi ;;
+        zsh )
+            if ! grep -q STOW-OVERRIDE-BLOCK "$HOME/.zshrc"; then                
+                stow_over ".zshrc" "${HOME}" "$app"
+            else
+                stowit "${HOME}" "$app"
+            fi ;;
+        * )
+            if [[ "$(whoami)" != "root" ]]; then
+                stow -v -R --no-folding -t "${HOME}" "$app"
+            fi
+    esac
 done
 
 echo ""
