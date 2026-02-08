@@ -7,6 +7,7 @@ useronly=(
     bin
     code
     colors
+    etckeeper
     fastfetch
     git
     kanshi
