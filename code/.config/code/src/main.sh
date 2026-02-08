@@ -2,7 +2,7 @@
 
 ## variable(s)
 old_IFS=$IFS
-required_pkgs=(codium)
+required_pkgs=("codium")
 config_file=$HOME/.config/VSCodium/User/globalStorage/zokugun.sync-settings/setting.yml
 
 ## function(s)
