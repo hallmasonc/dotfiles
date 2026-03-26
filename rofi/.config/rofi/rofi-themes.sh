@@ -1,8 +1,5 @@
 #!/bin/bash
 
-## source(s)
-source ./lib/bash-prints
-
 ## variable(s)
 rofi_repo="https://github.com/adi1090x/rofi"
 rofi_dir="$HOME/.config/rofi.git"
