@@ -9,14 +9,14 @@ theme="themes/one_dark.toml"
 ## function(s)
 main () {
     # make directory
-    mkdir -p "$dir/themes"
+    mkdir -p "$dir/themes" &> /dev/null
 
     # change directory
-    cd "$dir" &> /dev/null|| exit
+    cd "$dir" &> /dev/null || exit
 
     # cURL download alacritty theme and the print_colors.sh script
-    curl -L "$remote/$theme" -o "$dir/$theme"
-    curl -L "$remote/$script" -o "$dir/$script"
+    curl -L "$remote/$theme" -o "$dir/$theme" &> /dev/null
+    curl -L "$remote/$script" -o "$dir/$script" &> /dev/null
 
     # return to previous directory
     cd - &> /dev/null || exit

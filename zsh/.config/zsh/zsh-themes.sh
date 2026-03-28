@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## variables
+## variable(s)
 original="${HOME}/.zshrc.pre-oh-my-zsh"
 zshrc_file="${HOME}/.zshrc"
 ZSH_CUSTOM="${HOME}/.oh-my-zsh/custom"
