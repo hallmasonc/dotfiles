@@ -9,7 +9,7 @@ download_wallpaper () {
         mkdir -p "$HOME/Pictures/Wallpapers"
     fi
 
-    if ! curl -o "$HOME/Pictures/Wallpapers/default.png" $img; then
+    if ! curl -o "$HOME/Pictures/Wallpapers/default.png" $img &> /dev/null; then
         error_print "Failed to download default wallpaper"
         exit 1
     fi
@@ -17,7 +17,7 @@ download_wallpaper () {
 
 set_wallpaper () {
     if [ -e "$HOME/.config/sway/config" ]; then
-        sed -i "s/#output \* bg .* fill/output \* bg $HOME\/Pictures\/Wallpapers\/default.png fill/'" .config/sway/config
+        sed -i "s|output \* bg .* fill|output \* bg $HOME/Pictures/Wallpapers/default.png fill|" .config/sway/config
     fi
 }
 

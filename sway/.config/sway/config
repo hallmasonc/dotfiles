@@ -35,7 +35,7 @@ set $fontMono		pango:Fira Mono
 #####################################################################################################################
 
 # Wallpaper
-output * bg $HOME/Pictures/Wallpapers/default.png fill
+output * bg . fill
 
 # Font (default unless specified elsewhere)
 font	$fontMono	14
