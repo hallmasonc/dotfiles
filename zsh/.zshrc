@@ -1,4 +1,3 @@
-# STOW-OVERRIDE-BLOCK
 # run fastfetch at startup
 fastfetch
 

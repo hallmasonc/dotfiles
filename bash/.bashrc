@@ -74,7 +74,9 @@ set_bash_prompt() {
 if [ "$TERM" = linux ]; then
     PROMPT_COMMAND=set_bash_prompt
 else
-    eval "$($HOME/bin/oh-my-posh init bash --config "$HOME"/.cache/oh-my-posh/themes/stelbent.minimal.omp.json)"
+    if ! eval "$("$HOME"/bin/oh-my-posh init bash --config "$HOME"/.cache/oh-my-posh/themes/stelbent.minimal.omp.json)"; then
+        PROMPT_COMMAND=set_bash_prompt
+    fi
 fi
 
 # environment variables
