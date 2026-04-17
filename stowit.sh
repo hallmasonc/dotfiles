@@ -8,6 +8,7 @@ source "$SCRIPT_DIR/bin/bin/lib/bash-"prints
 ## variable(s)
 # shells
 bashrc="$HOME/.bashrc"
+bashprof="$HOME/.bash_profile"
 zshrc="$HOME/.zshrc"
 
 # folders - local user
@@ -32,6 +33,16 @@ useronly=(
 root=()
 
 ## function(s)
+file_exists () {
+    if [[ -e $1 ]]; then
+        input_print "$1 has been found, replace it? [y/n]: "
+        read -r user_input
+        if [[ "${user_input,,}" =~ ^(yes|y)$ ]]; then
+            rm "$1"
+        fi
+    fi
+}
+
 main () {
     # check 
     case $(whoami) in
@@ -45,23 +56,14 @@ main () {
             cd "$HOME/.dotfiles/" &>/dev/null || exit
 
             # check if .bashrc exists and remove
-            if [[ -e $bashrc ]]; then
-                input_print "$bashrc has been found, replace it? [y/n]: "
-                read -r user_input
-                if [[ "${user_input,,}" =~ ^(yes|y)$ ]]; then
-                    rm "$bashrc"
-                fi
-            fi
+            file_exists "$bashrc"
+
+            # check if .bash_profile exists and remove
+            file_exists "$bashprof"
 
             # check if .zshrc exists and remove
-            if [[ -e $zshrc ]]; then
-                input_print "$zshrc has been found, replace it? [y/n]: "
-                read -r user_input
-                if [[ "${user_input,,}" =~ ^(yes|y)$ ]]; then
-                    rm "$zshrc"
-                fi
-            fi
-  
+            file_exists "$zshrc"
+            
             # install only user space folders
             info_print "Stowing apps for user: $(whoami)"
             for app in "${useronly[@]}"; do
