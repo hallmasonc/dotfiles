@@ -114,7 +114,7 @@ main () {
     # check for existing SSH keys
     if ls "$SSH_DIR"/*.pub &> /dev/null; then
         # user input
-        input_print "A SSH key pair(s) already exist. Do you want to use one already generated? (y/N): "
+        input_print "A SSH key pair(s) already exist. Do you want to use one already generated? [y/n]: "
         read -r user_choice
         case $user_choice in
             y|Y ) select_key "PRIV_KEY";;    

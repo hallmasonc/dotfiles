@@ -143,8 +143,8 @@ install_pkg () {
     local l_prompt=""
 
     case $l_required in
-        true  ) l_prompt="Required package $l_pkg is missing. Do you want to install this package? (y/N): ";;
-        false ) l_prompt="Optional package $l_pkg is missing. Do you want to install this package? (y/N): ";;
+        true  ) l_prompt="Required package $l_pkg is missing. Do you want to install this package? [y/n]: ";;
+        false ) l_prompt="Optional package $l_pkg is missing. Do you want to install this package? [y/n]: ";;
     esac
 
     input_print "$l_prompt"

@@ -14,7 +14,7 @@ dependencies=(fzf git zsh)
 ## functions
 check_fonts () {
     if ! fc-list | grep -i 'meslo.*nerd' &> /dev/null; then
-        input_print "Powerlevel10k recommends Meslo Nerd Font to be installed. Do you want to install this package? (y/N): "
+        input_print "Powerlevel10k recommends Meslo Nerd Font to be installed. Do you want to install this package? [y/n]: "
         read -r user_install
         case $user_install in
             y|Y ) check-pkg -r ttf-meslo-nerd ;;

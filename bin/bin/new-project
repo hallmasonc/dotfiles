@@ -43,7 +43,7 @@ if __name__ == '__main__':
 EOF
     cd -
 
-    read -p "[?] Do you need a virtual enviroment? (Y/n)" venv
+    read -p "[?] Do you need a virtual enviroment? [y/n]" venv
     venv=${venv:-Y}
 
     if [ $venv = "Y"]; then

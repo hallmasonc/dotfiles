@@ -31,7 +31,6 @@ alias whatsmyip='dig +short myip.opendns.com @resolver1.opendns.com'
 # define prompt colors
 COL_USER='\[\e[30m\]' # the color of 'username'
 COL_HOST='\[\e[30m\]' # the color of 'host.domain'
-COL_CURSOR='\[\e[30m\]' # the color of the trailing cursor
 COL_CURRENT_PATH='\[\e[37m\]' # the color of the current directory full path
 COL_GIT_STATUS_CLEAN='\[\e[93m\]' # color of fresh git branch name, with NO changes
 COL_GIT_STATUS_CHANGES='\[\e[92m\]' # color of git branch, affter its diverged from remote
@@ -67,7 +66,7 @@ set_bash_prompt() {
     PS1+="$(parse_git_branch)"
     fi
 
-    PS1+="\n└${RESET} ${COL_CURSOR}\$ "
+    PS1+="\n└${RESET} \$ "
 }
 
 # check if running in a terminal emulator or in the virtual console
